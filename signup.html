@@ -3,209 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YourValueMatch | Create Your Impact Baseline</title>
+    <title>YourValueMatch | Establish Baseline Profile</title>
     <style>
-        :root {
-            --bg-canvas: #faf9f6;
-            --card-surface: #ffffff;
-            --text-primary: #0f172a;
-            --electric-lilac: linear-gradient(135deg, #c084fc 0%, #818cf8 100%);
-            --border-color: #cbd5e1;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-            background-color: var(--bg-canvas);
-            color: var(--text-primary);
-            display: flex;
-            justify-content: center;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 440px;
-            min-height: 100vh;
-            background: var(--card-surface);
-            padding: 32px 24px;
-            box-sizing: border-box;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: 800;
-            background: var(--electric-lilac);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
-        }
-
-        .step-indicator {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #818cf8;
-            font-weight: 700;
-            margin-top: 12px;
-        }
-
-        h2 {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 8px 0 24px 0;
-            text-align: center;
-            letter-spacing: -0.5px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 15px;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #818cf8;
-        }
-
-        .pillar-selection {
-            margin-top: 24px;
-        }
-
-        .pillar-card {
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .pillar-card input[type="radio"] {
-            margin-right: 14px;
-            transform: scale(1.2);
-        }
-
-        .pillar-card.selected {
-            border-color: #818cf8;
-            background: rgba(129, 140, 248, 0.05);
-        }
-
-        .pillar-title {
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .pillar-desc {
-            font-size: 13px;
-            color: #64748b;
-            margin-top: 2px;
-        }
-
-        .submit-btn {
-            display: block;
-            width: 100%;
-            background: var(--electric-lilac);
-            color: white;
-            text-align: center;
-            padding: 16px;
-            border-radius: 14px;
-            font-weight: 700;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 32px;
-            box-shadow: 0 8px 24px rgba(129, 140, 248, 0.2);
-        }
+        body { margin: 0; padding: 0; font-family: -apple-system, sans-serif; background: #faf9f6; display: flex; justify-content: center; min-height: 100vh; align-items: center; }
+        .form-shell { width: 100%; max-width: 440px; background: #ffffff; padding: 40px 28px; box-sizing: border-box; border-radius: 24px; border: 1px solid rgba(129, 140, 248, 0.12); box-shadow: 0 15px 40px rgba(0,0,0,0.02); }
+        .logo-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #c084fc 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .home-link { font-size: 13px; font-weight: 600; color: #64748b; text-decoration: none; border: 1px solid #e2e8f0; padding: 6px 14px; border-radius: 20px; }
+        .input-box { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; box-sizing: border-box; margin-bottom: 24px; }
+        .submit-btn { width: 100%; background: linear-gradient(135deg, #c084fc 0%, #818cf8 100%); color: white; padding: 16px; border-radius: 12px; font-weight: 700; border: none; font-size: 16px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <header>
-        <div class="logo">YourValueMatch</div>
-        <div class="step-indicator">Identify Values™</div>
-    </header>
+<div class="form-shell">
+    <div class="logo-nav">
+        <a href="index.html" class="logo">YourValueMatch</a>
+        <a href="index.html" class="home-link">← Home</a>
+    </div>
+    
+    <h2 style="margin: 0 0 8px 0; font-size: 22px; letter-spacing: -0.5px;">Setup Baseline Account</h2>
+    <p style="font-size: 14px; color: #64748b; margin: 0 0 24px 0;">Establish your tracking profile to access the alignment configurator dashboard.</p>
 
-    <h2>Set Your Baseline Identity</h2>
-
-    <form id="signupForm">
-        <div class="input-group">
-            <label for="username">Account Username</label>
-            <input type="text" id="username" class="form-control" placeholder="Choose your handle" required>
-        </div>
-
-        <div class="pillar-selection">
-            <label>Select your top baseline focus pillar:</label>
-            <p style="font-size: 13px; color: #64748b; margin: -4px 0 16px 0;">This anchors your primary lifestyle matrix tracking profile.</p>
-
-            <div class="pillar-card" onclick="selectPillar(this)">
-                <input type="radio" name="baselinePillar" value="clean" required>
-                <div>
-                    <div class="pillar-title">🛡️ Clean Composition</div>
-                    <div class="pillar-desc">Prioritizes toxin-free products, clean elements, and label safety.</div>
-                </div>
-            </div>
-
-            <div class="pillar-card" onclick="selectPillar(this)">
-                <input type="radio" name="baselinePillar" value="labor">
-                <div>
-                    <div class="pillar-title">🤝 Ethical Labor</div>
-                    <div class="pillar-desc">Prioritizes human rights, fair wages, and manufacturing integrity.</div>
-                </div>
-            </div>
-
-            <div class="pillar-card" onclick="selectPillar(this)">
-                <input type="radio" name="baselinePillar" value="circular">
-                <div>
-                    <div class="pillar-title">🌍 Circular Footprint</div>
-                    <div class="pillar-desc">Prioritizes waste reduction, local logistics, and long-lasting utility.</div>
-                </div>
-            </div>
-        </div>
-
-        <button type="submit" class="submit-btn">Create Profile & Build Engine</button>
+    <form id="profileForm">
+        <label style="display:block; font-weight:600; font-size:14px; margin-bottom:8px;">Profile Username Handle</label>
+        <input type="text" id="username" class="input-box" placeholder="@username" required>
+        
+        <button type="submit" class="submit-btn">Continue to Custom Matrix</button>
     </form>
 </div>
 
 <script>
-    function selectPillar(card) {
-        document.querySelectorAll('.pillar-card').forEach(c => c.classList.remove('selected'));
-        card.classList.add('selected');
-        card.querySelector('input[type="radio"]').checked = true;
-    }
-
-    document.getElementById('signupForm').addEventListener('submit', (e) => {
+    document.getElementById('profileForm').addEventListener('submit', (e) => {
         e.preventDefault();
-        const username = document.getElementById('username').value;
-        const selectedPillar = document.querySelector('input[name="baselinePillar"]:checked').value;
-
-        localStorage.setItem('vm_user', username);
-        localStorage.setItem('vm_baseline', selectedPillar);
-
+        localStorage.setItem('vm_user', document.getElementById('username').value);
         window.location.href = 'dashboard.html';
     });
 </script>
