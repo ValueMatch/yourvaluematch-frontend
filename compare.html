@@ -3,31 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ValueMatch | Analyze Product</title>
+    <title>YourValueMatch | Drop Link</title>
     <style>
-        body { margin: 0; font-family: -apple-system, sans-serif; background: #faf9f6; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 440px; min-height: 100vh; background: #ffffff; padding: 32px 24px; box-sizing: border-box; }
-        header { text-align: center; margin-bottom: 40px; }
-        .logo { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #c084fc 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
-        .input-box { width: 100%; padding: 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 15px; box-sizing: border-box; margin-bottom: 24px; }
-        .submit-btn { display: block; width: 100%; background: linear-gradient(135deg, #c084fc 0%, #818cf8 100%); color: white; padding: 16px; border-radius: 12px; font-weight: 700; border: none; font-size: 16px; cursor: pointer; text-align: center; text-decoration: none; box-shadow: 0 8px 24px rgba(129, 140, 248, 0.2); }
+        body { margin: 0; font-family: -apple-system, sans-serif; background: #faf9f6; display: flex; justify-content: center; min-height: 100vh; align-items: center; }
+        .card { width: 100%; max-width: 440px; background: white; padding: 40px 28px; box-sizing: border-box; border-radius: 24px; border: 1px solid rgba(129, 140, 248, 0.12); }
+        .logo-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #c084fc 0%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .input-url { width: 100%; padding: 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 15px; box-sizing: border-box; margin-bottom: 24px; }
+        .btn-go { width: 100%; background: linear-gradient(135deg, #c084fc 0%, #818cf8 100%); color: white; padding: 16px; border-radius: 12px; font-weight: 700; border: none; font-size: 16px; cursor: pointer; }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <header><div class="logo">YourValueMatch</div></header>
-    <h3 style="margin-top:0; letter-spacing: -0.5px;">Paste Product Link</h3>
-    <p style="font-size: 14px; color: #64748b; line-height: 1.5;">Drop any target item link from Amazon, Sephora, or Target to calculate matches against your parameters.</p>
-    
-    <input type="url" id="productUrl" class="input-box" placeholder="https://www.amazon.com/dp/..." required>
-    <button id="analyzeBtn" class="submit-btn">Run Alignment Match</button>
+<div class="card">
+    <div class="logo-row">
+        <a href="index.html" class="logo">YourValueMatch</a>
+        <a href="dashboard.html" style="font-size:13px; font-weight:600; color:#64748b; text-decoration:none;">← Adjust Sliders</a>
+    </div>
+    <h3 style="margin: 0 0 8px 0; letter-spacing: -0.5px;">Paste Product Target</h3>
+    <p style="font-size: 14px; color:#64748b; margin: 0 0 24px 0; line-height:1.5;">Drop an active checkout or item list listing URL to verify configuration mapping ratios.</p>
+    <input type="url" id="tgt" class="input-url" placeholder="https://..." required>
+    <button id="run" class="btn-go">Run Engine Alignment</button>
 </div>
-
 <script>
-    document.getElementById('analyzeBtn').addEventListener('click', () => {
-        const url = document.getElementById('productUrl').value;
-        if(!url) return alert("Please paste a valid link");
-        localStorage.setItem('vm_target_url', url);
+    document.getElementById('run').addEventListener('click', () => {
+        const val = document.getElementById('tgt').value;
+        if(!val) return alert("Paste active retail target asset");
+        localStorage.setItem('vm_tgt', val);
         window.location.href = 'results.html';
     });
 </script>
