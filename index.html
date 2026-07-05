@@ -19,25 +19,48 @@
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
             background-color: var(--bg-canvas);
             color: var(--text-primary);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
+            align-items: center;
         }
 
-        .app-container {
+        /* Responsive Wrapper to prevent full-screen stretching on Desktop */
+        .page-wrapper {
+            display: flex;
+            flex-direction: row;
             width: 100%;
-            max-width: 440px;
-            min-height: 100vh;
+            max-width: 1100px;
+            min-height: 80vh;
+            margin: 20px;
             background: var(--card-surface);
-            padding: 40px 24px;
-            box-sizing: border-box;
+            border-radius: 32px;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.04);
+            overflow: hidden;
+            border: 1px solid rgba(129, 140, 248, 0.08);
+        }
+
+        /* Left Side: Editorial Content Area */
+        .content-side {
+            flex: 1;
+            padding: 60px 48px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            box-sizing: border-box;
         }
 
-        .hero-section {
-            text-align: center;
-            margin-top: 20px;
+        /* Right Side: Visual Graphic Showcase */
+        .visual-side {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(192, 132, 252, 0.1) 0%, rgba(129, 140, 248, 0.1) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 48px;
+            position: relative;
+            box-sizing: border-box;
+            border-left: 1px solid rgba(129, 140, 248, 0.08);
         }
 
         .logo {
@@ -47,53 +70,56 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
+            display: inline-block;
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 38px;
             font-weight: 800;
-            line-height: 1.2;
-            letter-spacing: -0.8px;
-            margin-bottom: 16px;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin: 0 0 20px 0;
         }
 
         .subtitle {
-            font-size: 15px;
+            font-size: 16px;
             color: #64748b;
             line-height: 1.6;
-            margin-bottom: 32px;
-            padding: 0 8px;
+            margin-bottom: 40px;
+            max-width: 480px;
         }
 
-        /* Luminous App Feature Preview */
+        /* Luminous App Feature Preview Interface Widget */
         .preview-box {
-            background: var(--bg-canvas);
-            border: 1px solid rgba(129, 140, 248, 0.12);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 40px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
+            background: #ffffff;
+            border: 1px solid rgba(129, 140, 248, 0.15);
+            border-radius: 24px;
+            padding: 28px;
+            width: 100%;
+            max-width: 340px;
+            box-shadow: 0 15px 35px rgba(129, 140, 248, 0.08);
         }
 
         .preview-row {
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
         .preview-row:last-child { margin-bottom: 0; }
 
         .preview-label {
             font-size: 13px;
             font-weight: 600;
-            width: 140px;
+            width: 130px;
             text-align: left;
+            color: #475569;
         }
 
         .preview-bar {
             flex-grow: 1;
-            height: 6px;
-            background: #e2e8f0;
+            height: 8px;
+            background: #f1f5f9;
             border-radius: 10px;
             position: relative;
         }
@@ -101,16 +127,21 @@
         .preview-fill {
             height: 100%;
             border-radius: 10px;
-            background: linear-gradient(90deg, #818cf8, #c084fc);
+            background: var(--electric-lilac);
+        }
+
+        .action-container {
+            margin-top: 20px;
         }
 
         .cta-btn {
-            display: block;
+            display: inline-block;
             width: 100%;
+            max-width: 320px;
             background: var(--electric-lilac);
             color: white;
             text-align: center;
-            padding: 18px;
+            padding: 18px 24px;
             border-radius: 16px;
             font-weight: 700;
             border: none;
@@ -127,49 +158,82 @@
         }
 
         .footer-tag {
-            text-align: center;
             font-size: 12px;
             color: #94a3b8;
             margin-top: 24px;
+        }
+
+        /* Mobile Responsive Adaptations */
+        @media (max-width: 768px) {
+            .page-wrapper {
+                flex-direction: column;
+                margin: 0;
+                border-radius: 0;
+                box-shadow: none;
+                border: none;
+            }
+
+            .content-side {
+                padding: 40px 24px;
+                order: 1;
+            }
+
+            .visual-side {
+                padding: 32px 24px;
+                order: 2;
+                background: var(--bg-canvas);
+                border-left: none;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .cta-btn {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <div class="hero-section">
-        <div class="logo">YourValueMatch</div>
-        <h1>Hack the algorithm.<br>Shop your own way.</h1>
-        <p class="subtitle">
-            Corporate platforms use hidden rules to control what you buy. We give you the dashboard. Set your parameters, scan any link, and match products directly to your baseline profile.
-        </p>
+<div class="page-wrapper">
+    <div class="content-side">
+        <div>
+            <div class="logo">YourValueMatch</div>
+            <h1>Hack the algorithm.<br>Shop your own way.</h1>
+            <p class="subtitle">
+                Corporate platforms use hidden tracking structures to prioritize profit margins over what you care about. We give you the dashboard. Set your parameters, parse any shopping asset, and lock in your own custom alternative engine.
+            </p>
+        </div>
 
-        <div class="preview-box">
-            <div style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 16px; letter-spacing: 0.5px;">Interactive Engine Control Panel</div>
-            <div class="preview-row">
-                <span class="preview-label">🛡️ Value Track 1</span>
-                <div class="preview-bar"><div class="preview-fill" style="width: 85%;"></div></div>
-            </div>
-            <div class="preview-row">
-                <span class="preview-label">🤝 Value Track 2</span>
-                <div class="preview-bar"><div class="preview-fill" style="width: 40%;"></div></div>
-            </div>
-            <div class="preview-row">
-                <span class="preview-label">🌍 Value Track 3</span>
-                <div class="preview-bar"><div class="preview-fill" style="width: 70%;"></div></div>
-            </div>
+        <div class="action-container">
+            <a href="signup.html" class="cta-btn">Create Your Custom Matrix</a>
+            <div class="footer-tag">AI-Native Procurement Framework</div>
         </div>
     </div>
 
-    <div>
-        <a href="signup.html" class="cta-btn">
-        <div class="footer-tag">AI-Native Personal Procurement Framework</div>
+    <div class="visual-side">
+        <div class="preview-box">
+            <div style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 20px; letter-spacing: 0.5px; text-align: center;">Interactive Control Panel Matrix</div>
+            <div class="preview-row">
+                <span class="preview-label">🛡️ Value Priority 1</span>
+                <div class="preview-bar"><div class="preview-fill" style="width: 85%;"></div></div>
+            </div>
+            <div class="preview-row">
+                <span class="preview-label">🤝 Value Priority 2</span>
+                <div class="preview-bar"><div class="preview-fill" style="width: 45%;"></div></div>
+            </div>
+            <div class="preview-row">
+                <span class="preview-label">🌍 Value Priority 3</span>
+                <div class="preview-bar"><div class="preview-fill" style="width: 75%;"></div></div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Automatically forward creator tags along to the registration page if they exist
         const urlParams = new URLSearchParams(window.location.search);
         const ref = urlParams.get('ref');
         if (ref) {
