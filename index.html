@@ -19,48 +19,28 @@
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
             background-color: var(--bg-canvas);
             color: var(--text-primary);
-            min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            min-height: 100vh;
         }
 
-        /* Responsive Wrapper to prevent full-screen stretching on Desktop */
-        .page-wrapper {
-            display: flex;
-            flex-direction: row;
+        /* This locks the page structure to match the clean signup page framework perfectly */
+        .app-container {
             width: 100%;
-            max-width: 1100px;
-            min-height: 80vh;
-            margin: 20px;
+            max-width: 440px;
+            min-height: 100vh;
             background: var(--card-surface);
-            border-radius: 32px;
-            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.04);
-            overflow: hidden;
-            border: 1px solid rgba(129, 140, 248, 0.08);
-        }
-
-        /* Left Side: Editorial Content Area */
-        .content-side {
-            flex: 1;
-            padding: 60px 48px;
+            padding: 40px 24px;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-sizing: border-box;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
         }
 
-        /* Right Side: Visual Graphic Showcase */
-        .visual-side {
-            flex: 1;
-            background: linear-gradient(135deg, rgba(192, 132, 252, 0.1) 0%, rgba(129, 140, 248, 0.1) 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 48px;
-            position: relative;
-            box-sizing: border-box;
-            border-left: 1px solid rgba(129, 140, 248, 0.08);
+        .hero-section {
+            text-align: center;
+            margin-top: 20px;
         }
 
         .logo {
@@ -70,41 +50,40 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
             display: inline-block;
         }
 
         h1 {
-            font-size: 38px;
+            font-size: 28px;
             font-weight: 800;
-            line-height: 1.15;
-            letter-spacing: -1px;
-            margin: 0 0 20px 0;
+            line-height: 1.2;
+            letter-spacing: -0.8px;
+            margin: 0 0 16px 0;
         }
 
         .subtitle {
-            font-size: 16px;
+            font-size: 15px;
             color: #64748b;
             line-height: 1.6;
-            margin-bottom: 40px;
-            max-width: 480px;
+            margin-bottom: 36px;
+            padding: 0 8px;
         }
 
-        /* Luminous App Feature Preview Interface Widget */
+        /* Clean, non-stretching preview widget container */
         .preview-box {
             background: #ffffff;
             border: 1px solid rgba(129, 140, 248, 0.15);
-            border-radius: 24px;
-            padding: 28px;
-            width: 100%;
-            max-width: 340px;
-            box-shadow: 0 15px 35px rgba(129, 140, 248, 0.08);
+            border-radius: 20px;
+            padding: 24px 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(129, 140, 248, 0.04);
         }
 
         .preview-row {
             display: flex;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         .preview-row:last-child { margin-bottom: 0; }
 
@@ -118,7 +97,7 @@
 
         .preview-bar {
             flex-grow: 1;
-            height: 8px;
+            height: 6px;
             background: #f1f5f9;
             border-radius: 10px;
             position: relative;
@@ -130,25 +109,20 @@
             background: var(--electric-lilac);
         }
 
-        .action-container {
-            margin-top: 20px;
-        }
-
         .cta-btn {
-            display: inline-block;
+            display: block;
             width: 100%;
-            max-width: 320px;
             background: var(--electric-lilac);
             color: white;
             text-align: center;
             padding: 18px 24px;
-            border-radius: 16px;
+            border-radius: 14px;
             font-weight: 700;
             border: none;
             font-size: 16px;
             cursor: pointer;
             text-decoration: none;
-            box-shadow: 0 10px 28px rgba(129, 140, 248, 0.25);
+            box-shadow: 0 8px 24px rgba(129, 140, 248, 0.2);
             box-sizing: border-box;
             transition: transform 0.1s ease;
         }
@@ -158,77 +132,43 @@
         }
 
         .footer-tag {
+            text-align: center;
             font-size: 12px;
             color: #94a3b8;
             margin-top: 24px;
-        }
-
-        /* Mobile Responsive Adaptations */
-        @media (max-width: 768px) {
-            .page-wrapper {
-                flex-direction: column;
-                margin: 0;
-                border-radius: 0;
-                box-shadow: none;
-                border: none;
-            }
-
-            .content-side {
-                padding: 40px 24px;
-                order: 1;
-            }
-
-            .visual-side {
-                padding: 32px 24px;
-                order: 2;
-                background: var(--bg-canvas);
-                border-left: none;
-            }
-
-            h1 {
-                font-size: 28px;
-            }
-
-            .cta-btn {
-                max-width: 100%;
-            }
         }
     </style>
 </head>
 <body>
 
-<div class="page-wrapper">
-    <div class="content-side">
-        <div>
-            <div class="logo">YourValueMatch</div>
-            <h1>Hack the algorithm.<br>Shop your own way.</h1>
-            <p class="subtitle">
-                Corporate platforms use hidden tracking structures to prioritize profit margins over what you care about. We give you the dashboard. Set your parameters, parse any shopping asset, and lock in your own custom alternative engine.
-            </p>
-        </div>
+<div class="app-container">
+    <div class="hero-section">
+        <div class="logo">YourValueMatch</div>
+        <h1>Hack the algorithm.<br>Shop your own way.</h1>
+        <p class="subtitle">
+            Corporate platforms use hidden rules to control what you buy. We give you the dashboard. Set your parameters, scan any link, and match products directly to your baseline profile.
+        </p>
 
-        <div class="action-container">
-            <a href="signup.html" class="cta-btn">Create Your Custom Matrix</a>
-            <div class="footer-tag">AI-Native Procurement Framework</div>
-        </div>
-    </div>
-
-    <div class="visual-side">
         <div class="preview-box">
-            <div style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 20px; letter-spacing: 0.5px; text-align: center;">Interactive Control Panel Matrix</div>
+            <div style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 18px; letter-spacing: 0.5px;">Interactive Engine Control Panel</div>
             <div class="preview-row">
-                <span class="preview-label">🛡️ Value Priority 1</span>
+                <span class="preview-label">🛡️ Value Track 1</span>
                 <div class="preview-bar"><div class="preview-fill" style="width: 85%;"></div></div>
             </div>
             <div class="preview-row">
-                <span class="preview-label">🤝 Value Priority 2</span>
+                <span class="preview-label">🤝 Value Track 2</span>
                 <div class="preview-bar"><div class="preview-fill" style="width: 45%;"></div></div>
             </div>
             <div class="preview-row">
-                <span class="preview-label">🌍 Value Priority 3</span>
+                <span class="preview-label">🌍 Value Track 3</span>
                 <div class="preview-bar"><div class="preview-fill" style="width: 75%;"></div></div>
             </div>
         </div>
+    </div>
+
+    <div>
+        <a href="signup.html" class="cta-btn">Create Your Custom Matrix</a>
+        <div class="footer-tag">AI-Native Personal Procurement Framework</div>
     </div>
 </div>
 
