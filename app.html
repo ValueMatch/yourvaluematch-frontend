@@ -41,68 +41,74 @@
         }
         .back-link { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-decoration: none; }
 
-        /* STEP 1: INITIAL ONBOARDING VIEW */
-        #signupStep { display: flex; flex-direction: column; align-items: center; padding: 60px 20px; width: 100%; box-sizing: border-box;}
-        .signup-card {
+        /* STEP 1: INITIAL VALUE TRACK & IDENTITY SELECTION CONTAINER */
+        #onboardingWrapper { display: flex; flex-direction: column; align-items: center; padding: 40px 0; width: 100%; }
+        .setup-card {
             background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 24px;
-            padding: 32px; width: 100%; max-width: 480px; box-shadow: 0 4px 20px rgba(0,0,0,0.01);
-            display: flex; flex-direction: column; gap: 20px;
+            padding: 32px; width: 100%; max-width: 480px; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            display: flex; flex-direction: column; gap: 24px;
         }
-        .signup-card h2 { font-size: 22px; font-weight: 800; margin: 0; text-align: center; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group label { font-size: 13px; font-weight: 700; }
-        .form-input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; box-sizing: border-box; outline: none; }
-        
-        .pillar-option {
-            border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px; display: flex; gap: 12px; cursor: pointer; transition: all 0.2s;
-        }
-        .pillar-option.selected { border-color: #818cf8; background: rgba(129, 140, 248, 0.04); box-shadow: 0 0 0 1px #818cf8; }
-        .pillar-info strong { display: block; font-size: 14px; margin-bottom: 2px; }
-        .pillar-info p { margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
-        .submit-btn { background: var(--electric-lilac); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(129, 140, 248, 0.2); }
+        .setup-card h2 { font-size: 22px; font-weight: 800; margin: 0; text-align: center; letter-spacing: -0.5px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-size: 13px; font-weight: 700; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .input-text { width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        .input-text:focus { border-color: #818cf8; }
 
-        /* STEP 2: REVEALED WORKSPACE CORE */
-        #workspaceStep { display: none; flex-direction: column; gap: 24px; width: 100%; }
+        .pillar-select-list { display: flex; flex-direction: column; gap: 12px; }
+        .pillar-row {
+            border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px 16px; display: flex; gap: 14px; align-items: flex-start; cursor: pointer; transition: all 0.2s;
+        }
+        .pillar-row.active { border-color: #818cf8; background: rgba(129, 140, 248, 0.03); box-shadow: 0 0 0 1px #818cf8; }
+        .pillar-row input[type="radio"] { margin-top: 3px; cursor: pointer; }
+        .pillar-meta strong { display: block; font-size: 14px; margin-bottom: 2px; }
+        .pillar-meta p { margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
+        
+        .action-btn { background: var(--electric-lilac); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(129, 140, 248, 0.2); transition: opacity 0.2s; }
+        .action-btn:hover { opacity: 0.95; }
+
+        /* STEP 2: LIVE MATRIX WORKSPACE DISPLAY (HIDDEN BY DEFAULT) */
+        #workspaceWrapper { display: none; width: 100%; flex-direction: column; gap: 24px; }
         .workspace-grid { display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
 
-        .control-panel { background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 24px; padding: 24px; }
-        .panel-title { font-size: 18px; font-weight: 700; margin: 0 0 16px 0; }
-        .url-box { position: relative; margin-bottom: 24px; }
-        .url-input { width: 100%; padding: 14px 90px 14px 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; box-sizing: border-box; outline: none; }
-        .scan-btn { position: absolute; right: 8px; top: 8px; background: #0f172a; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; }
-
-        .slider-group { margin-bottom: 20px; }
-        .slider-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: #475569; }
-        .slider-ui { width: 100%; height: 6px; background: #f1f5f9; border-radius: 10px; -webkit-appearance: none; outline: none; margin: 12px 0; }
-        .slider-ui::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: white; border: 4px solid #818cf8; cursor: pointer; }
-
-        .results-stream { display: flex; flex-direction: column; gap: 24px; }
-        .comparison-hero { background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 24px; padding: 20px; display: flex; align-items: center; justify-content: space-between; }
-        .product-meta { display: flex; align-items: center; gap: 16px; }
+        .config-sidebar { background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+        .config-header { font-size: 14px; font-weight: 800; text-transform: uppercase; color: #818cf8; letter-spacing: 0.5px; margin: 0; }
         
-        .img-container { width: 64px; height: 64px; border-radius: 14px; background: #f1f5f9; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; flex-shrink: 0; }
-        .img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .scan-container { position: relative; width: 100%; }
+        .scan-input { width: 100%; padding: 14px 90px 14px 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 13px; box-sizing: border-box; outline: none; font-family: monospace; }
+        .scan-action { position: absolute; right: 8px; top: 8px; background: #0f172a; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
 
-        .product-title { font-weight: 800; font-size: 16px; margin: 0 0 4px 0; }
-        .product-domain { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
-        .score-val { font-size: 36px; font-weight: 900; color: var(--match-red); }
+        .slider-item { display: flex; flex-direction: column; gap: 8px; }
+        .slider-text { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; }
+        .slider-control { width: 100%; height: 6px; background: #f1f5f9; border-radius: 10px; -webkit-appearance: none; outline: none; margin: 8px 0; }
+        .slider-control::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: white; border: 4px solid #818cf8; cursor: pointer; }
 
-        .section-divider { font-size: 12px; text-transform: uppercase; font-weight: 700; color: var(--text-secondary); letter-spacing: 0.5px; display: flex; justify-content: space-between; }
-        .reset-link { color: #818cf8; text-decoration: none; cursor: pointer; }
+        .stream-layout { display: flex; flex-direction: column; gap: 24px; }
+        .scanned-hero-card { background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 24px; padding: 20px; display: flex; align-items: center; justify-content: space-between; }
+        .meta-group { display: flex; align-items: center; gap: 16px; }
+        
+        .media-box { width: 64px; height: 64px; border-radius: 12px; background: #f1f5f9; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; flex-shrink: 0; }
+        .media-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        .alt-card { background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 18px; }
-        .alt-header { display: flex; justify-content: space-between; align-items: flex-start; }
-        .alt-brand { font-size: 18px; font-weight: 800; margin: 0 0 4px 0; }
-        .alt-price { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
-        .match-pill { background: rgba(34, 197, 94, 0.1); color: var(--match-green); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+        .title-txt { font-weight: 800; font-size: 16px; margin: 0 0 4px 0; letter-spacing: -0.3px; }
+        .domain-txt { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+        .match-score-large { font-size: 38px; font-weight: 900; color: var(--match-red); text-align: right; line-height: 1; }
 
-        .breakdown-table { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .table-node { background: #f8fafc; border: 1px solid #f1f5f9; padding: 12px; border-radius: 12px; }
-        .node-lbl { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; margin-bottom: 4px; }
-        .node-val { font-size: 13px; font-weight: 700; }
+        .stream-title-row { font-size: 11px; text-transform: uppercase; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
+        .clear-trigger { color: #818cf8; text-decoration: none; cursor: pointer; }
 
-        .evidence-drawer { background: rgba(129, 140, 248, 0.03); border-left: 4px solid #818cf8; padding: 14px; border-radius: 0 12px 12px 0; font-size: 13px; line-height: 1.5; color: #475569; }
-        .swap-action-btn { background: var(--electric-lilac); color: white; border: none; width: 100%; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center; }
+        .alternative-card { background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+        .alt-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .alt-brand-name { font-size: 18px; font-weight: 800; margin: 0 0 4px 0; }
+        .alt-pricing { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+        .badge-pill { background: rgba(34, 197, 94, 0.08); color: var(--match-green); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1px solid rgba(34, 197, 94, 0.1); }
+
+        .matrix-metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .metric-cell { background: #f8fafc; border: 1px solid #f1f5f9; padding: 12px; border-radius: 12px; }
+        .cell-label { font-size: 10px; text-transform: uppercase; color: var(--text-secondary); font-weight: 800; margin-bottom: 4px; letter-spacing: 0.3px; }
+        .cell-value { font-size: 13px; font-weight: 700; }
+
+        .log-container { background: rgba(129, 140, 248, 0.02); border-left: 4px solid #818cf8; padding: 14px 16px; border-radius: 0 12px 12px 0; font-size: 13px; line-height: 1.5; color: #475569; }
+        .swap-button { background: var(--electric-lilac); color: white; border: none; width: 100%; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(129, 140, 248, 0.15); }
 
         @media (max-width: 890px) { .workspace-grid { grid-template-columns: 1fr; } }
     </style>
@@ -115,108 +121,117 @@
         <a href="index.html" class="back-link">← Reset to Home</a>
     </header>
 
-    <main id="signupStep">
-        <div class="signup-card">
-            <h2>Configure Your Values Algorithm</h2>
+    <main id="onboardingWrapper">
+        <div class="setup-card">
+            <h2>Configure Your Matrix Profile</h2>
             
             <div class="form-group">
                 <label>Account Identity Email</label>
-                <input type="email" id="fieldEmail" class="form-input" placeholder="Enter your email to save profile preferences" required>
+                <input type="email" id="userEmailField" class="input-text" placeholder="Enter your email to anchor your preferences" required>
             </div>
 
             <div class="form-group">
-                <label>Select Primary Optimization Vector:</label>
-                
-                <div class="pillar-option selected" id="p1">
-                    <div class="pillar-info">
-                        <strong>🍃 Clean Ingredient Sourcing</strong>
-                        <p>Flags synthetics, toxic compounds, and chemical production transparency issues.</p>
+                <label>Select Top Baseline Focus Pillar</label>
+                <div class="pillar-select-list">
+                    
+                    <div class="pillar-row active" id="vector1">
+                        <input type="radio" name="pillar" id="rad1" checked>
+                        <div class="pillar-meta">
+                            <strong>🍃 Clean Composition</strong>
+                            <p>Prioritizes toxin-free products, clean elements, and full label safety verification.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="pillar-option" id="p2">
-                    <div class="pillar-info">
-                        <strong>🐰 Cruelty-Free Accountability</strong>
-                        <p>Tracks international animal testing metrics and supply chain verify frameworks.</p>
+                    <div class="pillar-row" id="vector2">
+                        <input type="radio" name="pillar" id="rad2">
+                        <div class="pillar-meta">
+                            <strong>🐰 Ethical Labor Tracking</strong>
+                            <p>Prioritizes human rights, fair wages, safety oversight, and manufacturing integrity.</p>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
-            <button class="submit-btn" id="btnSubmitSignup">Lock Preferences & Build Engine</button>
+            <button class="action-btn" id="submitSetupBtn">Create Profile & Build Engine</button>
         </div>
     </main>
 
-    <main id="workspaceStep">
+    <main id="workspaceWrapper">
         <div class="workspace-grid">
             
-            <section class="control-panel">
-                <h2 class="panel-title" id="userTitleLabel">Custom Matrix Settings</h2>
+            <section class="config-sidebar">
+                <h3 class="config-header" id="activeProfileLabel">1. Configure Matrix</h3>
                 
-                <div class="url-box">
-                    <input type="url" id="linkField" class="url-input" value="https://www.amazon.co.uk/Burts-Bees-Lip-Balm-Pomegranate">
-                    <button class="scan-btn" id="runAnalysis">Scan URL</button>
+                <div class="scan-container">
+                    <input type="url" id="itemUrlInput" class="scan-input" value="https://www.amazon.co.uk/Burts-Bees-Lip-Balm-Pomegranate">
+                    <button class="scan-action" id="triggerScanBtn">Scan URL</button>
                 </div>
 
-                <div class="slider-group">
-                    <div class="slider-header"><span>🍃 Cruelty-Free</span><span id="txt1">88%</span></div>
-                    <input type="range" class="slider-ui" id="range1" min="0" max="100" value="88">
+                <div class="slider-item">
+                    <div class="slider-text"><span>🍃 Cruelty-Free</span><span id="vVal1">88%</span></div>
+                    <input type="range" class="slider-control" id="sl1" min="0" max="100" value="88">
                 </div>
-                <div class="slider-group">
-                    <div class="slider-header"><span>🧪 Clean Ingredients</span><span id="txt2">100%</span></div>
-                    <input type="range" class="slider-ui" id="range2" min="0" max="100" value="100">
+                <div class="slider-item">
+                    <div class="slider-text"><span>🧪 Clean Ingredients</span><span id="vVal2">100%</span></div>
+                    <input type="range" class="slider-control" id="sl2" min="0" max="100" value="100">
                 </div>
-                <div class="slider-group">
-                    <div class="slider-header"><span>📦 Low-Waste Pack</span><span id="txt3">12%</span></div>
-                    <input type="range" class="slider-ui" id="range3" min="0" max="100" value="12">
+                <div class="slider-item">
+                    <div class="slider-text"><span>📦 Low-Waste Pack</span><span id="vVal3">12%</span></div>
+                    <input type="range" class="slider-control" id="sl3" min="0" max="100" value="12">
                 </div>
             </section>
 
-            <section class="results-stream">
-                <div class="comparison-hero">
-                    <div class="product-meta">
-                        <div class="img-container">
-                            <img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=150&q=80" alt="Current E-Commerce Item Scan">
+            <section class="stream-layout">
+                
+                <div class="scanned-hero-card">
+                    <div class="meta-group">
+                        <div class="media-box">
+                            <img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=150&q=80" alt="Scanned E-commerce Product Asset">
                         </div>
                         <div>
-                            <h3 class="product-title" id="lblTitle">Burt's Bees Lip Balm Pomegranate</h3>
-                            <span class="product-domain" id="lblDomain">amazon.co.uk</span>
+                            <h3 class="title-txt" id="displayProductTitle">Burt's Bees Lip Balm Pomegranate</h3>
+                            <span class="domain-txt" id="displayDomain">amazon.co.uk</span>
                         </div>
                     </div>
-                    <div style="text-align: right;">
-                        <span style="font-size: 10px; font-weight:700; color:var(--text-secondary); text-transform:uppercase;">Current Match</span>
-                        <div class="score-val" id="lblScore">35%</div>
+                    <div>
+                        <span style="font-size: 9px; font-weight:800; color:var(--text-secondary); text-transform:uppercase; display:block; margin-bottom:2px; text-align:right;">Current Match</span>
+                        <div class="match-score-large" id="computedScoreLabel">35%</div>
                     </div>
                 </div>
 
-                <div class="section-divider">
-                    <span>Recommended Value Alternative Matches Found</span>
-                    <span class="reset-link" id="clearSearch">Clear & Scan Another Link</span>
+                <div class="stream-title-row">
+                    <span>2. Recommended Value Alternative Matches Found</span>
+                    <span class="clear-trigger" id="resetInputLink">Clear & Scan Another Link</span>
                 </div>
 
-                <div class="alt-card">
-                    <div class="alt-header">
+                <div class="alternative-card">
+                    <div class="alt-top">
                         <div style="display:flex; gap:16px; align-items:center;">
-                            <div class="img-container">
-                                <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=150&q=80" alt="Ethical Matrix Match Alternative">
+                            <div class="media-box">
+                                <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=150&q=80" alt="Alternative Value Verified Product Asset">
                             </div>
                             <div>
-                                <h4 class="alt-brand" style="margin:0;">Hurraw! Balm</h4>
-                                <span class="alt-price">Estimated Match Cost: £4.10</span>
+                                <h4 class="alt-brand-name" style="margin:0;">Hurraw! Balm</h4>
+                                <span class="alt-pricing">Estimated Value Validation: £4.10</span>
                             </div>
                         </div>
-                        <span class="match-pill">96% Alternative Match</span>
+                        <span class="badge-pill">96% Alternative Match</span>
                     </div>
                     
-                    <div class="breakdown-table">
-                        <div class="table-node"><div class="node-lbl">Composition</div><div class="node-val">100% Raw Organic</div></div>
-                        <div class="table-node"><div class="node-lbl">Labor Trace</div><div class="node-val">Leaping Bunny Cert</div></div>
-                        <div class="table-node"><div class="node-lbl">Packaging</div><div class="node-val">Recyclable Eco-Tube</div></div>
+                    <div class="matrix-metrics-grid">
+                        <div class="metric-cell"><div class="cell-label">Composition</div><div class="cell-value">100% Raw Organic</div></div>
+                        <div class="metric-cell"><div class="cell-label">Labor Trace</div><div class="metric-cell-value cell-value">Leaping Bunny Cert</div></div>
+                        <div class="metric-cell"><div class="cell-label">Packaging</div><div class="cell-value">Recyclable Eco-Tube</div></div>
                     </div>
-                    <div class="evidence-drawer">
-                        <strong>Verification Evidence Log:</strong> Formulated using 100% organic food-grade cold-pressed oils. Production facilities operate fully solar-powered out of Whitefish, Montana, mitigating standard logistical footprints.
+                    
+                    <div class="log-container">
+                        <strong>Verification Evidence Log:</strong> Formulated using 100% organic food-grade cold-pressed oils. Production facilities operate fully solar-powered out of Whitefish, Montana, mitigating standard logistic distribution footprints.
                     </div>
-                    <button class="swap-action-btn" onclick="alert('Redirecting via verified value affiliate parameters...')">Swap to Hurraw! Balm</button>
+                    
+                    <button class="swap-button" onclick="alert('Redirecting via verified value affiliate criteria logs...')">Swap to Hurraw! Balm</button>
                 </div>
+
             </section>
         </div>
     </main>
@@ -224,59 +239,66 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const signupStep = document.getElementById('signupStep');
-        const workspaceStep = document.getElementById('workspaceStep');
-        const btnSubmitSignup = document.getElementById('btnSubmitSignup');
-        const userTitleLabel = document.getElementById('userTitleLabel');
+        const onboardingWrapper = document.getElementById('onboardingWrapper');
+        const workspaceWrapper = document.getElementById('workspaceWrapper');
+        const submitSetupBtn = document.getElementById('submitSetupBtn');
+        const activeProfileLabel = document.getElementById('activeProfileLabel');
 
-        // Step 1 option toggle logic mechanics
-        const p1 = document.getElementById('p1');
-        const p2 = document.getElementById('p2');
-        p1.addEventListener('click', () => { p1.classList.add('selected'); p2.classList.remove('selected'); });
-        p2.addEventListener('click', () => { p2.classList.add('selected'); p1.classList.remove('selected'); });
+        // Step 1: Radio/Row selection mechanics switcher
+        const row1 = document.getElementById('vector1');
+        const row2 = document.getElementById('vector2');
+        const rad1 = document.getElementById('rad1');
+        const rad2 = document.getElementById('rad2');
 
-        btnSubmitSignup.addEventListener('click', () => {
-            const email = document.getElementById('fieldEmail').value;
-            if(!email || !email.includes('@')) return alert('Please input a valid email address.');
+        row1.addEventListener('click', () => { row1.classList.add('active'); row2.classList.remove('active'); rad1.checked = true; });
+        row2.addEventListener('click', () => { row2.classList.add('active'); row1.classList.remove('active'); rad2.checked = true; });
+
+        // Handle inline submission and local configuration load loop
+        submitSetupBtn.addEventListener('click', () => {
+            const emailValue = document.getElementById('userEmailField').value.trim();
+            if(!emailValue || !emailValue.includes('@')) return alert('Please input a valid identity email address.');
             
-            localStorage.setItem('vm_user_profile_email', email);
-            userTitleLabel.textContent = `Matrix Active: ${email}`;
-            signupStep.style.display = 'none';
-            workspaceStep.style.display = 'flex';
+            localStorage.setItem('vm_active_user_email', emailValue);
+            activeProfileLabel.textContent = `Active Profile: ${emailValue}`;
+            
+            onboardingWrapper.style.display = 'none';
+            workspaceWrapper.style.display = 'flex';
         });
 
-        // Dynamic calculator logic arrays tracking matching algorithms
-        const ranges = [document.getElementById('range1'), document.getElementById('range2'), document.getElementById('range3')];
-        const outputs = [document.getElementById('txt1'), document.getElementById('txt2'), document.getElementById('txt3')];
-        const scoreDisplay = document.getElementById('lblScore');
+        // Step 2: Live Slider Math Engine Controls
+        const sliders = [document.getElementById('sl1'), document.getElementById('sl2'), document.getElementById('sl3')];
+        const outputs = [document.getElementById('vVal1'), document.getElementById('vVal2'), document.getElementById('vVal3')];
+        const scoreLabel = document.getElementById('computedScoreLabel');
 
-        function updateMath() {
-            let sum = 0;
-            ranges.forEach((r, i) => {
-                outputs[i].textContent = `${r.value}%`;
-                sum += parseInt(r.value);
+        function recalibrateMatrix() {
+            let total = 0;
+            sliders.forEach((slider, i) => {
+                outputs[i].textContent = `${slider.value}%`;
+                total += parseInt(slider.value);
             });
-            let computed = Math.max(10, 104 - Math.round((sum / 3) * 0.8));
-            scoreDisplay.textContent = `${computed}%`;
-            scoreDisplay.style.color = computed > 50 ? "var(--match-green)" : "var(--match-red)";
+            // Computational algorithm inverse ratio tracking
+            let score = Math.max(12, 104 - Math.round((total / 3) * 0.8));
+            scoreLabel.textContent = `${score}%`;
+            scoreLabel.style.color = score > 50 ? "var(--match-green)" : "var(--match-red)";
         }
-        ranges.forEach(r => r.addEventListener('input', updateMath));
+        sliders.forEach(s => s.addEventListener('input', recalibrateMatrix));
 
-        document.getElementById('runAnalysis').addEventListener('click', () => {
-            const path = document.getElementById('linkField').value;
-            if(!path) return alert('Input retail item tracking URL destination path.');
+        // URL Retail Destination String parser field
+        document.getElementById('triggerScanBtn').addEventListener('click', () => {
+            const path = document.getElementById('itemUrlInput').value.trim();
+            if(!path) return alert('Input target e-commerce retail data parameter listing path.');
             try {
-                const parsed = new URL(path);
-                document.getElementById('lblDomain').textContent = parsed.hostname.replace('www.', '');
-                alert(`Running vector data scanning loop against matching indicators on ${parsed.hostname}...`);
+                const urlObj = new URL(path);
+                document.getElementById('displayDomain').textContent = urlObj.hostname.replace('www.', '');
+                alert(`Running vector scanning sequences across components on ${urlObj.hostname}...`);
             } catch(e) {
-                document.getElementById('lblDomain').textContent = 'External Store Listing';
+                document.getElementById('displayDomain').textContent = 'External Store Listing';
             }
         });
 
-        document.getElementById('clearSearch').addEventListener('click', () => {
-            document.getElementById('linkField').value = '';
-            document.getElementById('linkField').focus();
+        document.getElementById('resetInputLink').addEventListener('click', () => {
+            document.getElementById('itemUrlInput').value = '';
+            document.getElementById('itemUrlInput').focus();
         });
     });
 </script>
