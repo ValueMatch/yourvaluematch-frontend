@@ -23,33 +23,51 @@
         }
 
         .welcome-container {
-            width: 100%; max-width: 680px; padding: 40px 24px; box-sizing: border-box;
+            width: 100%; max-width: 800px; padding: 60px 24px; box-sizing: border-box;
             display: flex; flex-direction: column; align-items: center; text-align: center;
         }
 
         header {
-            margin-bottom: 48px;
+            margin-bottom: 40px;
         }
 
         .logo {
-            font-size: 32px; font-weight: 800;
+            font-size: 36px; font-weight: 800;
             background: var(--electric-lilac); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             letter-spacing: -1px; text-decoration: none;
         }
 
-        h1 { font-size: 44px; font-weight: 800; line-height: 1.15; letter-spacing: -1.5px; margin: 0 0 24px 0; }
-        .hero-desc { font-size: 16px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 48px; max-width: 580px; }
+        h1 { font-size: 48px; font-weight: 800; line-height: 1.15; letter-spacing: -1.5px; margin: 0 0 24px 0; }
+        .hero-desc { font-size: 16px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 40px; max-width: 600px; }
         
+        /* Interactive Engine Preview Decoration Card */
+        .preview-mini-panel {
+            background: var(--card-surface);
+            border: 1px solid var(--border-ui);
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 340px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            margin-bottom: 40px;
+            text-align: left;
+        }
+        .preview-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #818cf8; letter-spacing: 0.5px; margin-bottom: 12px; display: block;}
+        .preview-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 13px; font-weight: 600;}
+        .preview-bar { width: 120px; height: 6px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
+        .preview-fill { height: 100%; background: #818cf8; border-radius: 4px; }
+
         .launch-btn {
             display: inline-block; background: var(--electric-lilac); color: white; border: none; 
-            padding: 20px 40px; border-radius: 16px; font-size: 16px; font-weight: 700; 
+            padding: 18px 40px; border-radius: 16px; font-size: 16px; font-weight: 700; 
             cursor: pointer; text-decoration: none; box-shadow: 0 10px 30px rgba(129, 140, 248, 0.3); 
-            transition: transform 0.1s;
+            transition: transform 0.1s, box-shadow 0.2s;
         }
+        .launch-btn:hover { box-shadow: 0 12px 35px rgba(129, 140, 248, 0.4); }
         .launch-btn:active { transform: scale(0.98); }
 
-        .footer-tag {
-            font-size: 12px; color: var(--text-secondary); font-weight: 600; margin-top: 48px; text-transform: uppercase; letter-spacing: 0.5px;
+        footer {
+            font-size: 11px; color: var(--text-secondary); font-weight: 700; margin-top: 60px; text-transform: uppercase; letter-spacing: 1px;
         }
     </style>
 </head>
@@ -63,13 +81,32 @@
     <main>
         <h1>Hack the algorithm.<br>Shop your own way.</h1>
         <p class="hero-desc">
-            Corporate retail sites manipulate catalog algorithms to control your checkout choices. YourValueMatch intercepts incoming product data parameters, letting you instantly match any link to your custom validation criteria.
+            Corporate platforms use hidden rules to control what you buy. We give you the dashboard. Set your parameters, scan any link, and match products directly to your baseline profile.
         </p>
-        <a href="app.html" class="launch-btn">Launch Custom Matrix Matrix</a>
+
+        <center>
+            <div class="preview-mini-panel">
+                <span class="preview-title">Interactive Engine Controls</span>
+                <div class="preview-row">
+                    <span>🍃 Cruelty-Free</span>
+                    <div class="preview-bar"><div class="preview-fill" style="width: 85%;"></div></div>
+                </div>
+                <div class="preview-row">
+                    <span>🧪 Clean Ingredients</span>
+                    <div class="preview-bar"><div class="preview-fill" style="width: 90%;"></div></div>
+                </div>
+                <div class="preview-row">
+                    <span>📦 Low-Waste Pack</span>
+                    <div class="preview-bar"><div class="preview-fill" style="width: 25%;"></div></div>
+                </div>
+            </div>
+        </center>
+
+        <a href="app.html" class="launch-btn">Open Procurement Engine</a>
     </main>
 
-    <footer class="footer-tag">
-        AI-Native Personal Procurement Framework
+    <footer>
+        AI-Powered Value Alignment System
     </footer>
 </div>
 
