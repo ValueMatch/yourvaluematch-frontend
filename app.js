@@ -1,50 +1,60 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const TOTAL_TOKENS = 10;
-    const sliders = [
-        { el: document.getElementById('slider1'), disp: document.getElementById('val1-display') },
-        { el: document.getElementById('slider2'), disp: document.getElementById('val2-display') },
-        { el: document.getElementById('slider3'), disp: document.getElementById('val3-display') },
-        { el: document.getElementById('slider4'), disp: document.getElementById('val4-display') }
-    ];
-    const tokenPoolDisplay = document.getElementById('tokenPool');
-    const saveButton = document.getElementById('saveAlgoBtn');
-
-    function updateSliders(changedSliderIdx) {
-        let currentTotal = 0;
-        
-        // Calculate the tentative sum
-        sliders.forEach(s => currentTotal += parseInt(s.el.value));
-
-        // If the allocations exceed our maximum energy budget, throttle the slider movement
-        if (currentTotal > TOTAL_TOKENS) {
-            const excess = currentTotal - TOTAL_TOKENS;
-            const targetSlider = sliders[changedSliderIdx].el;
-            targetSlider.value = parseInt(targetSlider.value) - excess;
-            currentTotal = TOTAL_TOKENS;
-        }
-
-        // Render remaining energy ledger points
-        const remaining = TOTAL_TOKENS - currentTotal;
-        tokenPoolDisplay.textContent = remaining;
-
-        // Sync numerical text feedback
-        sliders.forEach(s => s.disp.textContent = s.el.value);
+    const urlParams = new URLSearchParams(window.location.search);
+    const creator = urlParams.get('ref');
+    if (creator) {
+        document.getElementById('algoModeBadge').textContent = `Tuning ${creator}'s Vibe Matrix`;
     }
 
-    // Attach real-time input listeners to each metric track
-    sliders.forEach((slider, idx) => {
-        slider.el.addEventListener('input', () => updateSliders(idx));
-    });
+    const tracks = [
+        { el: document.getElementById('track1'), out: document.getElementById('val1') },
+        { el: document.getElementById('track2'), out: document.getElementById('val2') },
+        { el: document.getElementById('track3'), out: document.getElementById('val3') },
+        { el: document.getElementById('track4'), out: document.getElementById('val4') }
+    ];
+    const scoreCircle = document.getElementById('luminousScore');
+    const statusText = document.getElementById('statusText');
 
-    saveButton.addEventListener('click', () => {
+    function calculateLuminousMetrics() {
+        let total = 0;
+        tracks.forEach(t => {
+            const val = parseInt(t.el.value);
+            total += val;
+            t.out.textContent = `${val}%`;
+        });
+
+        let averageScore = Math.round(total / 4);
+        scoreCircle.textContent = `${averageScore}%`;
+
+        if (averageScore >= 70) {
+            scoreCircle.style.background = 'var(--match-high)';
+            scoreCircle.style.boxShadow = '0 8px 24px rgba(74, 222, 128, 0.35)';
+            statusText.textContent = "High Intensity Alignment Mode";
+        } else if (averageScore >= 35) {
+            scoreCircle.style.background = 'var(--match-mid)';
+            scoreCircle.style.boxShadow = '0 8px 24px rgba(251, 146, 60, 0.35)';
+            statusText.textContent = "Balanced Hybrid Alignment Mode";
+        } else {
+            scoreCircle.style.background = 'var(--match-low)';
+            scoreCircle.style.boxShadow = '0 8px 24px rgba(248, 113, 113, 0.35)';
+            statusText.textContent = "Standard Utility Focus";
+        }
+    }
+
+    tracks.forEach(track => {
+        track.el.addEventListener('input', calculateLuminousMetrics);
+    });
+    
+    calculateLuminousMetrics();
+
+    document.getElementById('lockMatrixBtn').addEventListener('click', () => {
         const payload = {
-            sustainability: sliders[0].el.value,
-            labor: sliders[1].el.value,
-            crueltyFree: sliders[2].el.value,
-            budget: sliders[3].el.value
+            cleanComposition: document.getElementById('track1').value,
+            ethicalLabor: document.getElementById('track2').value,
+            circularFootprint: document.getElementById('track3').value,
+            budgetEfficiency: document.getElementById('track4').value
         };
         
-        // Alert configuration state (This data will securely hit Render backend API next)
-        alert(`Algorithm locked successfully!\nSustainability: ${payload.sustainability}\nLabor: ${payload.labor}\nCruelty-Free: ${payload.crueltyFree}\nBudget: ${payload.budget}`);
+        localStorage.setItem('vm_algo_payload', JSON.stringify(payload));
+        window.location.href = 'compare.html';
     });
 });
