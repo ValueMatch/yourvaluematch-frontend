@@ -5,159 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YourValueMatch Engine</title>
     <style>
-        :root {
-            --bg-canvas: #faf9f6;
-            --card-surface: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #64748b;
-            --electric-lilac: linear-gradient(135deg, #c084fc 0%, #818cf8 100%);
-            --border-ui: rgba(129, 140, 248, 0.15);
-            --match-green: #22c55e;
-            --match-orange: #f97316;
-            --match-red: #ef4444;
-        }
-
-        body {
-            margin: 0; padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-            background-color: var(--bg-canvas);
-            color: var(--text-primary);
-            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
-        }
-
-        .app-container {
-            width: 100%; max-width: 1200px; padding: 32px 24px; box-sizing: border-box;
-            display: flex; flex-direction: column; gap: 24px;
-        }
-
-        header {
-            width: 100%; display: flex; justify-content: space-between; align-items: center;
-            padding-bottom: 16px; border-bottom: 1px solid var(--border-ui);
-        }
-
-        .logo {
-            font-size: 24px; font-weight: 800;
-            background: var(--electric-lilac); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: -1px; text-decoration: none;
-        }
-        .back-link { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-decoration: none; cursor: pointer; }
-
-        /* STEP 1: INITIAL VALUE TRACK & IDENTITY SELECTION CONTAINER */
-        #onboardingWrapper { display: flex; flex-direction: column; align-items: center; padding: 40px 0; width: 100%; }
-        .setup-card {
-            background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 24px;
-            padding: 32px; width: 100%; max-width: 480px; box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-            display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;
-        }
-        .setup-card h2 { font-size: 22px; font-weight: 800; margin: 0; text-align: center; letter-spacing: -0.5px; }
-        .form-group { display: flex; flex-direction: column; gap: 8px; }
-        .form-group label { font-size: 13px; font-weight: 700; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px; }
-        .input-text { width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
-        .input-text:focus { border-color: #818cf8; }
-
-        .pillar-select-list { display: flex; flex-direction: column; gap: 12px; }
-        .pillar-row {
-            border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px 16px; display: flex; gap: 14px; align-items: flex-start; cursor: pointer; transition: all 0.2s;
-        }
-        .pillar-row.active { border-color: #818cf8; background: rgba(129, 140, 248, 0.03); box-shadow: 0 0 0 1px #818cf8; }
-        .pillar-row input[type="radio"] { margin-top: 3px; cursor: pointer; }
-        .pillar-meta strong { display: block; font-size: 14px; margin-bottom: 2px; }
-        .pillar-meta p { margin: 0; font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
-        
-        .action-btn { background: var(--electric-lilac); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(129, 140, 248, 0.2); }
-        .action-btn:hover { opacity: 0.95; }
-
-        /* STEP 2: LIVE MATRIX WORKSPACE DISPLAY (HIDDEN BY DEFAULT) */
-        #workspaceWrapper { display: none; width: 100%; flex-direction: column; gap: 24px; }
-        .workspace-grid { display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
-
-        .config-sidebar { background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
-        .config-header { font-size: 14px; font-weight: 800; text-transform: uppercase; color: #818cf8; letter-spacing: 0.5px; margin: 0; word-break: break-all; }
-        
-        .scan-container { position: relative; width: 100%; }
-        .scan-input { width: 100%; padding: 14px 90px 14px 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 13px; box-sizing: border-box; outline: none; font-family: monospace; }
-        .scan-action { position: absolute; right: 8px; top: 8px; background: #0f172a; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
-
-        .slider-item { display: flex; flex-direction: column; gap: 8px; }
-        .slider-text { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; }
-        .slider-control { width: 100%; height: 6px; background: #f1f5f9; border-radius: 10px; -webkit-appearance: none; outline: none; margin: 8px 0; }
-        .slider-control::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: white; border: 4px solid #818cf8; cursor: pointer; }
-
-        .stream-layout { display: flex; flex-direction: column; gap: 24px; }
-        .scanned-hero-card { background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 24px; padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-        .meta-group { display: flex; align-items: center; gap: 16px; }
-        
-        .media-box { width: 64px; height: 64px; border-radius: 12px; background: #f1f5f9; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; flex-shrink: 0; }
-        .media-box img { width: 100%; height: 100%; object-fit: cover; }
-
-        .title-txt { font-weight: 800; font-size: 16px; margin: 0 0 4px 0; letter-spacing: -0.3px; }
-        .domain-txt { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
-        .match-score-large { font-size: 38px; font-weight: 900; color: var(--match-red); text-align: right; line-height: 1; transition: color 0.2s; }
-
-        /* UNIFIED SECTION TYPOGRAPHY STYLE */
-        .stream-title-row, .sidebar-section-label { 
-            font-size: 11px; 
-            text-transform: uppercase; 
-            font-weight: 800; 
-            color: var(--text-secondary); 
-            letter-spacing: 0.5px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        }
-        .clear-trigger { color: #818cf8; text-decoration: none; cursor: pointer; }
-
-        #alternativesContainer { display: flex; flex-direction: column; gap: 20px; }
-
-        .alternative-card { background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 20px; animation: fadeIn 0.3s ease-in-out; }
-        .alt-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
-        .alt-brand-name { font-size: 18px; font-weight: 800; margin: 0 0 4px 0; }
-        .alt-pricing { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
-        .badge-pill { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; transition: all 0.2s; flex-shrink: 0; }
-
-        .matrix-metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .metric-cell { background: #f8fafc; border: 1px solid #f1f5f9; padding: 12px; border-radius: 12px; }
-        .cell-label { font-size: 10px; text-transform: uppercase; color: var(--text-secondary); font-weight: 800; margin-bottom: 4px; letter-spacing: 0.3px; }
-        .cell-value { font-size: 13px; font-weight: 700; }
-
-        .log-container { background: rgba(129, 140, 248, 0.02); border-left: 4px solid #818cf8; padding: 14px 16px; border-radius: 0 12px 12px 0; font-size: 13px; line-height: 1.5; color: #475569; }
-        .swap-button { background: var(--electric-lilac); color: white; border: none; width: 100%; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(129, 140, 248, 0.15); }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 890px) { 
-            .workspace-grid { grid-template-columns: 1fr; } 
-            .scanned-hero-card, .alt-top { flex-direction: column; align-items: flex-start; }
-            .match-score-large { text-align: left; margin-top: 8px; }
-            .matrix-metrics-grid { grid-template-columns: 1fr; }
+        /* ... [Keep all previous CSS styles] ... */
+        /* ADD THIS SPECIFIC FIX TO YOUR CSS: */
+        .action-btn { 
+            background: var(--electric-lilac); color: white; border: none; 
+            padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 700; 
+            cursor: pointer; position: relative; z-index: 1000; 
+            pointer-events: auto; /* Ensures clickability */
         }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <header>
-        <a href="index.html" class="logo">YourValueMatch</a>
-        <span class="back-link" id="resetEntireSessionLink">← Reset Entire Session</span>
-    </header>
-
     <main id="onboardingWrapper">
         <div class="setup-card">
             <h2>Configure Your Matrix Profile</h2>
-            
-            <div class="form-group">
-                <label>Account Identity Email</label>
-                <input type="email" id="userEmailField" class="input-text" placeholder="Enter your email to anchor your preferences" required>
-            </div>
+            <button class="action-btn" id="submitSetupBtn" style="pointer-events: auto;">Create Profile & Build Engine</button>
+        </div>
+    </main>
 
-            <div class="form-group">
-                <label>Select Top Baseline Focus Pillar</label>
-                <div class="pillar-select-list">
-                    <div class="pillar-row active" id="vector1">
-                        <input type="radio" name="pillar" id="rad1" checked>
-                        <div class="pillar-meta">
-                            <strong>🍃 Clean Composition</strong>
-                            <p>
+    <main id="workspaceWrapper" style="display:none;">
+        </main>
+</div>
+
+<script>
+    // REPLACEMENT SCRIPT BLOCK
+    document.getElementById('submitSetupBtn').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevents form submission
+        e.stopPropagation(); // Stops event bubbling
+        
+        const emailValue = document.getElementById('userEmailField').value.trim();
+        if(!emailValue || !emailValue.includes('@')) {
+            alert('Please input a valid email address.');
+            return;
+        }
+        
+        // Save and Transition
+        localStorage.setItem('vm_active_user_email', emailValue);
+        document.getElementById('onboardingWrapper').style.display = 'none';
+        document.getElementById('workspaceWrapper').style.display = 'flex';
+        
+        // Trigger initialization
+        if(typeof recalibrateMatrix === 'function') recalibrateMatrix();
+    });
+</script>
+</body>
+</html>
