@@ -94,7 +94,17 @@
         .domain-txt { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
         .match-score-large { font-size: 38px; font-weight: 900; color: var(--match-red); text-align: right; line-height: 1; transition: color 0.2s; }
 
-        .stream-title-row { font-size: 11px; text-transform: uppercase; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
+        /* UNIFIED SECTION TYPOGRAPHY STYLE */
+        .stream-title-row, .sidebar-section-label { 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            font-weight: 800; 
+            color: var(--text-secondary); 
+            letter-spacing: 0.5px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
         .clear-trigger { color: #818cf8; text-decoration: none; cursor: pointer; }
 
         #alternativesContainer { display: flex; flex-direction: column; gap: 20px; }
@@ -126,7 +136,7 @@
 <div class="app-container">
     <header>
         <a href="index.html" class="logo">YourValueMatch</a>
-        <a href="index.html" class="back-link">← Reset to Home</a>
+        <a href="index.html" class="back-link" id="resetEntireSessionLink">← Reset Entire Session</a>
     </header>
 
     <main id="onboardingWrapper">
@@ -166,18 +176,18 @@
         <div class="workspace-grid">
             
             <section class="config-sidebar">
-                <h3 class="config-header" id="activeProfileLabel">1. Configure Matrix</h3>
+                <h3 class="config-header" id="activeProfileLabel">Active Profile: Initializing...</h3>
                 
-                <div style="margin-bottom: 4px;">
-                    <label style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.3px;">1. Paste Product URL</label>
+                <div class="sidebar-section-label">
+                    <span>1. Paste Product URL</span>
                 </div>
                 <div class="scan-container">
                     <input type="url" id="itemUrlInput" class="scan-input" value="https://www.amazon.co.uk/Burts-Bees-Lip-Balm-Pomegranate">
                     <button class="scan-action" id="triggerScanBtn">Scan URL</button>
                 </div>
 
-                <div style="margin-top: 16px; margin-bottom: 4px;">
-                    <label style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.3px;">2. Adjust Value Algorithm</label>
+                <div style="margin-top: 8px;" class="sidebar-section-label">
+                    <span>2. Adjust Value Algorithm</span>
                 </div>
                 <div class="slider-item">
                     <div class="slider-text"><span>🍃 Cruelty-Free</span><span id="vVal1">88%</span></div>
@@ -228,7 +238,6 @@
 </div>
 
 <script>
-    // Mocking out a diverse catalog representing simulated Sovrn Affiliate directory returns
     const sovrnMerchantCatalog = [
         {
             name: "Hurraw! Balm",
@@ -269,8 +278,18 @@
         const workspaceWrapper = document.getElementById('workspaceWrapper');
         const submitSetupBtn = document.getElementById('submitSetupBtn');
         const activeProfileLabel = document.getElementById('activeProfileLabel');
+        const resetEntireSessionLink = document.getElementById('resetEntireSessionLink');
 
-        // Step 1 Layout toggles
+        // Check state persistence immediately upon load metrics
+        const savedEmail = localStorage.getItem('vm_active_user_email');
+        if (savedEmail) {
+            activeProfileLabel.textContent = `Active Profile: ${savedEmail}`;
+            onboardingWrapper.style.display = 'none';
+            workspaceWrapper.style.display = 'flex';
+            recalibrateMatrix();
+        }
+
+        // Setup UI row click triggers
         const row1 = document.getElementById('vector1');
         const row2 = document.getElementById('vector2');
         const rad1 = document.getElementById('rad1');
@@ -288,23 +307,26 @@
             
             onboardingWrapper.style.display = 'none';
             workspaceWrapper.style.display = 'flex';
-            recalibrateMatrix(); // Run calculation array instantly on build
+            recalibrateMatrix();
         });
 
-        // Step 2: Algorithmic Calibration Engines
+        // Hard reset layout loop tracking
+        resetEntireSessionLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('vm_active_user_email');
+            window.location.reload();
+        });
+
+        // Sliders & Calculation Engine
         const sliders = [document.getElementById('sl1'), document.getElementById('sl2'), document.getElementById('sl3')];
         const outputs = [document.getElementById('vVal1'), document.getElementById('vVal2'), document.getElementById('vVal3')];
         const scoreLabel = document.getElementById('computedScoreLabel');
         const alternativesContainer = document.getElementById('alternativesContainer');
 
         function updateColorClass(element, score) {
-            if (score >= 75) {
-                element.style.color = "var(--match-green)";
-            } else if (score >= 45) {
-                element.style.color = "var(--match-orange)";
-            } else {
-                element.style.color = "var(--match-red)";
-            }
+            if (score >= 75) { element.style.color = "var(--match-green)"; } 
+            else if (score >= 45) { element.style.color = "var(--match-orange)"; } 
+            else { element.style.color = "var(--match-red)"; }
         }
 
         function updatePillColor(element, score) {
@@ -328,18 +350,15 @@
             const cIngUser = parseInt(sliders[1].value);
             const lWasteUser = parseInt(sliders[2].value);
 
-            // Update UI value indicator readouts
             outputs[0].textContent = `${cFreeUser}%`;
             outputs[1].textContent = `${cIngUser}%`;
             outputs[2].textContent = `${lWasteUser}%`;
 
-            // Calculate current match score based on parameters
             let baselineAvg = (cFreeUser + cIngUser + lWasteUser) / 3;
             let finalHeroScore = Math.max(12, 104 - Math.round(baselineAvg * 0.78));
             scoreLabel.textContent = `${finalHeroScore}%`;
             updateColorClass(scoreLabel, finalHeroScore);
 
-            // Process and recalculate the entire Sovrn Simulated Array
             let calculatedDirectory = sovrnMerchantCatalog.map(product => {
                 let d1 = Math.abs(product.metrics.crueltyFree - cFreeUser);
                 let d2 = Math.abs(product.metrics.cleanIngredients - cIngUser);
@@ -350,10 +369,8 @@
                 return { ...product, computedMatchScore: alignmentPercentage };
             });
 
-            // Sort listing output showing the strongest matches first
             calculatedDirectory.sort((a, b) => b.computedMatchScore - a.computedMatchScore);
 
-            // Clear and render dynamic DOM stream items
             alternativesContainer.innerHTML = "";
             calculatedDirectory.forEach(product => {
                 const card = document.createElement('div');
@@ -386,13 +403,11 @@
                 `;
                 alternativesContainer.appendChild(card);
                 
-                // Color style rendering update cycles
                 const currentPill = document.getElementById(`scorePill_${product.name.replace(/\s+/g, '')}`);
                 updatePillColor(currentPill, product.computedMatchScore);
             });
         }
 
-        // Attach event listeners to all sliders to trigger complete recalculations dynamically on input
         sliders.forEach(s => s.addEventListener('input', recalibrateMatrix));
 
         document.getElementById('triggerScanBtn').addEventListener('click', () => {
@@ -402,7 +417,6 @@
                 const urlObj = new URL(path);
                 document.getElementById('displayDomain').textContent = urlObj.hostname.replace('www.', '');
                 
-                // Simulate pulling dynamic catalog data on lookups
                 if(path.toLowerCase().includes('burt')) {
                     document.getElementById('displayProductTitle').textContent = "Burt's Bees Lip Balm Pomegranate";
                     document.getElementById('displayScannedPrice').textContent = "Est. Price: £3.51";
