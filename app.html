@@ -42,10 +42,11 @@
         }
         .back-link { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-decoration: none; }
 
-        .workspace-grid { display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; width: 100%; }
+        #workspaceWrapper { display: flex; width: 100%; flex-direction: column; gap: 24px; }
+        .workspace-grid { display: grid; grid-template-columns: 360px 1fr; gap: 28px; align-items: start; }
 
         .config-sidebar { background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
-        .config-header { font-size: 14px; font-weight: 800; text-transform: uppercase; color: #818cf8; letter-spacing: 0.5px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .config-header { font-size: 14px; font-weight: 800; text-transform: uppercase; color: #818cf8; letter-spacing: 0.5px; margin: 0; }
         
         .scan-container { position: relative; width: 100%; }
         .scan-input { width: 100%; padding: 14px 90px 14px 16px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 13px; box-sizing: border-box; outline: none; font-family: monospace; }
@@ -67,7 +68,16 @@
         .domain-txt { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
         .match-score-large { font-size: 38px; font-weight: 900; color: var(--match-red); text-align: right; line-height: 1; transition: color 0.2s; }
 
-        .stream-title-row { font-size: 11px; text-transform: uppercase; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
+        .stream-title-row, .sidebar-section-label { 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            font-weight: 800; 
+            color: var(--text-secondary); 
+            letter-spacing: 0.5px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
         .clear-trigger { color: #818cf8; text-decoration: none; cursor: pointer; }
 
         #alternativesContainer { display: flex; flex-direction: column; gap: 20px; }
@@ -98,66 +108,68 @@
 
 <div class="app-container">
     <header>
-        <a href="index.html" class="logo">YourValueMatch</a>
-        <a href="index.html" class="back-link" id="resetHomeBtn">← Reset Framework</a>
+        <a href="signup.html" class="logo">YourValueMatch</a>
+        <a href="signup.html" class="back-link" id="resetEntireSessionLink">← Reset Entire Session</a>
     </header>
 
-    <main class="workspace-grid">
-        <section class="config-sidebar">
-            <h3 class="config-header" id="activeProfileLabel">Active Profile: Guest Matrix</h3>
-            
-            <div style="margin-bottom: 4px;">
-                <label style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.3px;">1. Paste Product URL</label>
-            </div>
-            <div class="scan-container">
-                <input type="url" id="itemUrlInput" class="scan-input" value="https://www.amazon.co.uk/Burts-Bees-Lip-Balm-Pomegranate">
-                <button class="scan-action" id="triggerScanBtn">Scan URL</button>
-            </div>
+    <main id="workspaceWrapper">
+        <div class="workspace-grid">
+            <section class="config-sidebar">
+                <h3 class="config-header" id="activeProfileLabel">Active Profile: Initializing...</h3>
+                
+                <div class="sidebar-section-label">
+                    <span>1. Paste Product URL</span>
+                </div>
+                <div class="scan-container">
+                    <input type="url" id="itemUrlInput" class="scan-input" value="https://www.amazon.co.uk/Burts-Bees-Lip-Balm-Pomegranate">
+                    <button class="scan-action" id="triggerScanBtn">Scan URL</button>
+                </div>
 
-            <div style="margin-top: 16px; margin-bottom: 4px;">
-                <label style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.3px;">2. Adjust Value Algorithm</label>
-            </div>
-            <div class="slider-item">
-                <div class="slider-text"><span>🍃 Cruelty-Free</span><span id="vVal1">88%</span></div>
-                <input type="range" class="slider-control" id="sl1" min="0" max="100" value="88">
-            </div>
-            <div class="slider-item">
-                <div class="slider-text"><span>🧪 Clean Ingredients</span><span id="vVal2">100%</span></div>
-                <input type="range" class="slider-control" id="sl2" min="0" max="100" value="100">
-            </div>
-            <div class="slider-item">
-                <div class="slider-text"><span>📦 Low-Waste Pack</span><span id="vVal3">12%</span></div>
-                <input type="range" class="slider-control" id="sl3" min="0" max="100" value="12">
-            </div>
-        </section>
+                <div style="margin-top: 8px;" class="sidebar-section-label">
+                    <span>2. Adjust Value Algorithm</span>
+                </div>
+                <div class="slider-item">
+                    <div class="slider-text"><span>🍃 Cruelty-Free</span><span id="vVal1">88%</span></div>
+                    <input type="range" class="slider-control" id="sl1" min="0" max="100" value="88">
+                </div>
+                <div class="slider-item">
+                    <div class="slider-text"><span>🧪 Clean Ingredients</span><span id="vVal2">100%</span></div>
+                    <input type="range" class="slider-control" id="sl2" min="0" max="100" value="100">
+                </div>
+                <div class="slider-item">
+                    <div class="slider-text"><span>📦 Low-Waste Pack</span><span id="vVal3">12%</span></div>
+                    <input type="range" class="slider-control" id="sl3" min="0" max="100" value="12">
+                </div>
+            </section>
 
-        <section class="stream-layout">
-            <div class="scanned-hero-card">
-                <div class="meta-group">
-                    <div class="media-box">
-                        <img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=150&q=80" alt="Scanned Product Asset">
-                    </div>
-                    <div>
-                        <h3 class="title-txt" id="displayProductTitle">Burt's Bees Lip Balm Pomegranate</h3>
-                        <div style="display: flex; gap: 12px; align-items: center;">
-                            <span class="domain-txt" id="displayDomain">amazon.co.uk</span>
-                            <span style="font-size: 12px; font-weight: 700; color: #ef4444; background: rgba(239, 68, 68, 0.06); padding: 2px 8px; border-radius: 6px;" id="displayScannedPrice">Est. Price: £3.51</span>
+            <section class="stream-layout">
+                <div class="scanned-hero-card">
+                    <div class="meta-group">
+                        <div class="media-box">
+                            <img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=150&q=80" alt="Scanned E-commerce Product Asset">
+                        </div>
+                        <div>
+                            <h3 class="title-txt" id="displayProductTitle">Burt's Bees Lip Balm Pomegranate</h3>
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <span class="domain-txt" id="displayDomain">amazon.co.uk</span>
+                                <span style="font-size: 12px; font-weight: 700; color: #ef4444; background: rgba(239, 68, 68, 0.06); padding: 2px 8px; border-radius: 6px;" id="displayScannedPrice">Est. Price: £3.51</span>
+                            </div>
                         </div>
                     </div>
+                    <div>
+                        <span style="font-size: 9px; font-weight:800; color:var(--text-secondary); text-transform:uppercase; display:block; margin-bottom:2px; text-align:right;">Current Match</span>
+                        <div class="match-score-large" id="computedScoreLabel">35%</div>
+                    </div>
                 </div>
-                <div>
-                    <span style="font-size: 9px; font-weight:800; color:var(--text-secondary); text-transform:uppercase; display:block; margin-bottom:2px; text-align:right;">Current Match</span>
-                    <div class="match-score-large" id="computedScoreLabel">35%</div>
+
+                <div class="stream-title-row">
+                    <span>3. Recommended Value Alternative Matches Found</span>
+                    <span class="clear-trigger" id="resetInputLink">Clear & Scan Another Link</span>
                 </div>
-            </div>
 
-            <div class="stream-title-row">
-                <span>3. Recommended Value Alternative Matches Found</span>
-                <span class="clear-trigger" id="resetInputLink">Clear & Scan Another Link</span>
-            </div>
-
-            <div id="alternativesContainer"></div>
-        </section>
+                <div id="alternativesContainer"></div>
+            </section>
+        </div>
     </main>
 </div>
 
@@ -186,45 +198,54 @@
             metrics: { crueltyFree: 90, cleanIngredients: 88, lowWaste: 95 },
             composition: "Plant-Based Wax", labor: "Certified B-Corp", packaging: "Plastic-Free Tube",
             evidence: "100% vegan formulation utilizing candelilla wax instead of standard animal derivatives. Container decomposes rapidly post-lifecycle."
+        },
+        {
+            name: "Bite Beauty Agave Mask alternative",
+            price: "£12.00",
+            img: "https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=150&q=80",
+            metrics: { crueltyFree: 85, cleanIngredients: 92, lowWaste: 40 },
+            composition: "Resveratrol Complex", labor: "Cruelty Free Intl", packaging: "Aluminum Tube",
+            evidence: "High concentration of clean antioxidants and clean lipids. Packaged in aluminum, though outer caps still require specialized sorting loops."
         }
     ];
 
     document.addEventListener('DOMContentLoaded', () => {
         const activeProfileLabel = document.getElementById('activeProfileLabel');
+        const resetEntireSessionLink = document.getElementById('resetEntireSessionLink');
         const sliders = [document.getElementById('sl1'), document.getElementById('sl2'), document.getElementById('sl3')];
         const outputs = [document.getElementById('vVal1'), document.getElementById('vVal2'), document.getElementById('vVal3')];
         const scoreLabel = document.getElementById('computedScoreLabel');
         const alternativesContainer = document.getElementById('alternativesContainer');
 
-        // SAFE GUARD: Read localStorage inside a try/catch block to block incognito storage crashes
-        let cachedUser = "Guest Matrix";
-        let cachedPillar = "clean";
+        // Check state persistence values safely
+        let savedEmail = "Guest Matrix";
+        let initialPillar = "clean";
+        
         try {
-            if (localStorage.getItem('vm_user')) cachedUser = localStorage.getItem('vm_user');
-            if (localStorage.getItem('vm_initial_pillar')) cachedPillar = localStorage.getItem('vm_initial_pillar');
-        } catch (storageError) {
-            console.warn("Storage reading restricted by environment context. Using default fallback configuration flags.");
+            if(localStorage.getItem('vm_active_user_email')) savedEmail = localStorage.getItem('vm_active_user_email');
+            if(localStorage.getItem('vm_initial_pillar')) initialPillar = localStorage.getItem('vm_initial_pillar');
+        } catch(storageErr) {
+            console.warn("Storage reading restricted by system policies. Using fallback values.");
         }
 
-        if (activeProfileLabel) {
-            activeProfileLabel.textContent = `Active Profile: ${cachedUser}`;
-        }
+        activeProfileLabel.textContent = `Active Profile: ${savedEmail}`;
 
-        if (cachedPillar === 'labor') {
-            if(sliders[0]) sliders[0].value = 90;
-            if(sliders[1]) sliders[1].value = 60;
-            if(sliders[2]) sliders[2].value = 50;
+        // Set algorithm values based on onboarding selection
+        if (initialPillar === 'labor') {
+            sliders[0].value = 95;
+            sliders[1].value = 50;
+            sliders[2].value = 65;
         } else {
-            if(sliders[0]) sliders[0].value = 60;
-            if(sliders[1]) sliders[1].value = 100;
-            if(sliders[2]) sliders[2].value = 40;
+            sliders[0].value = 88;
+            sliders[1].value = 100;
+            sliders[2].value = 12;
         }
 
         function updateColorClass(element, score) {
             if (!element) return;
-            if (score >= 75) element.style.color = "var(--match-green)";
-            else if (score >= 45) element.style.color = "var(--match-orange)";
-            else element.style.color = "var(--match-red)";
+            if (score >= 75) { element.style.color = "var(--match-green)"; } 
+            else if (score >= 45) { element.style.color = "var(--match-orange)"; } 
+            else { element.style.color = "var(--match-red)"; }
         }
 
         function updatePillColor(element, score) {
@@ -245,27 +266,97 @@
         }
 
         function recalibrateMatrix() {
-            if(!sliders[0] || !sliders[1] || !sliders[2]) return;
-            
             const cFreeUser = parseInt(sliders[0].value);
             const cIngUser = parseInt(sliders[1].value);
             const lWasteUser = parseInt(sliders[2].value);
 
-            if(outputs[0]) outputs[0].textContent = `${cFreeUser}%`;
-            if(outputs[1]) outputs[1].textContent = `${cIngUser}%`;
-            if(outputs[2]) outputs[2].textContent = `${lWasteUser}%`;
+            outputs[0].textContent = `${cFreeUser}%`;
+            outputs[1].textContent = `${cIngUser}%`;
+            outputs[2].textContent = `${lWasteUser}%`;
 
             let baselineAvg = (cFreeUser + cIngUser + lWasteUser) / 3;
             let finalHeroScore = Math.max(12, 104 - Math.round(baselineAvg * 0.78));
-            
-            if(scoreLabel) {
-                scoreLabel.textContent = `${finalHeroScore}%`;
-                updateColorClass(scoreLabel, finalHeroScore);
-            }
+            scoreLabel.textContent = `${finalHeroScore}%`;
+            updateColorClass(scoreLabel, finalHeroScore);
 
-            if(!alternativesContainer) return;
-            alternativesContainer.innerHTML = "";
-            
-            sovrnMerchantCatalog.forEach(product => {
+            let calculatedDirectory = sovrnMerchantCatalog.map(product => {
                 let d1 = Math.abs(product.metrics.crueltyFree - cFreeUser);
-                let d
+                let d2 = Math.abs(product.metrics.cleanIngredients - cIngUser);
+                let d3 = Math.abs(product.metrics.lowWaste - lWasteUser);
+                let rawVariance = (d1 + d2 + d3) / 3;
+                
+                let alignmentPercentage = Math.max(10, Math.min(100, Math.round(100 - rawVariance)));
+                return { ...product, computedMatchScore: alignmentPercentage };
+            });
+
+            calculatedDirectory.sort((a, b) => b.computedMatchScore - a.computedMatchScore);
+
+            alternativesContainer.innerHTML = "";
+            calculatedDirectory.forEach(product => {
+                const targetId = product.name.replace(/[^a-zA-Z0-9]/g, '');
+                const card = document.createElement('div');
+                card.className = "alternative-card";
+                card.innerHTML = `
+                    <div class="alt-top">
+                        <div style="display:flex; gap:16px; align-items:center;">
+                            <div class="media-box">
+                                <img src="${product.img}" alt="${product.name}">
+                            </div>
+                            <div>
+                                <h4 class="alt-brand-name" style="margin:0;">${product.name}</h4>
+                                <span class="alt-pricing">Estimated Value Validation: ${product.price}</span>
+                            </div>
+                        </div>
+                        <span class="badge-pill" id="scorePill_${targetId}" style="border: 1px solid;">${product.computedMatchScore}% Match Alternative</span>
+                    </div>
+                    
+                    <div class="matrix-metrics-grid">
+                        <div class="metric-cell"><div class="cell-label">Composition</div><div class="cell-value">${product.composition}</div></div>
+                        <div class="metric-cell"><div class="cell-label">Labor Trace</div><div class="cell-value">${product.labor}</div></div>
+                        <div class="metric-cell"><div class="cell-label">Packaging</div><div class="cell-value">${product.packaging}</div></div>
+                    </div>
+                    
+                    <div class="log-container">
+                        <strong>Verification Evidence Log:</strong> ${product.evidence}
+                    </div>
+                    
+                    <button class="swap-button" onclick="alert('Routing tracking parameters via Sovrn affiliate code triggers...')">Swap to ${product.name}</button>
+                `;
+                alternativesContainer.appendChild(card);
+                
+                const currentPill = document.getElementById(`scorePill_${targetId}`);
+                updatePillColor(currentPill, product.computedMatchScore);
+            });
+        }
+
+        // Initialize listener inputs layout mapping
+        sliders.forEach(s => s.addEventListener('input', recalibrateMatrix));
+        recalibrateMatrix();
+
+        document.getElementById('triggerScanBtn').addEventListener('click', () => {
+            const path = document.getElementById('itemUrlInput').value.trim();
+            if(!path) return alert('Input target data path.');
+            try {
+                const urlObj = new URL(path);
+                document.getElementById('displayDomain').textContent = urlObj.hostname.replace('www.', '');
+                
+                if(path.toLowerCase().includes('burt')) {
+                    document.getElementById('displayProductTitle').textContent = "Burt's Bees Lip Balm Pomegranate";
+                    document.getElementById('displayScannedPrice').textContent = "Est. Price: £3.51";
+                } else {
+                    document.getElementById('displayProductTitle').textContent = "Alternative Scanned Store Listing Item";
+                    document.getElementById('displayScannedPrice').textContent = "Est. Price: £6.99";
+                }
+                
+                recalibrateMatrix(); 
+            } catch(e) {
+                document.getElementById('displayDomain').textContent = 'External Store Listing';
+            }
+        });
+
+        document.getElementById('resetInputLink').addEventListener('click', () => {
+            document.getElementById('itemUrlInput').value = '';
+            document.getElementById('itemUrlInput').focus();
+        });
+
+        resetEntireSessionLink
