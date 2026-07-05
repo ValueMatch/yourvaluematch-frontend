@@ -37,6 +37,10 @@
         h1 { font-size: 48px; font-weight: 800; line-height: 1.15; letter-spacing: -1.5px; margin: 0 0 24px 0; }
         .hero-desc { font-size: 16px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 40px; max-width: 600px; }
         
+        .preview-wrapper {
+            display: flex; justify-content: center; width: 100%;
+        }
+
         .preview-mini-panel {
             background: var(--card-surface); border: 1px solid var(--border-ui); border-radius: 20px;
             padding: 20px; width: 100%; max-width: 340px; box-shadow: 0 10px 25px rgba(0,0,0,0.02);
@@ -47,13 +51,25 @@
         .preview-bar { width: 120px; height: 6px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
         .preview-fill { height: 100%; background: #818cf8; border-radius: 4px; }
 
+        /* Updated button style to match uploaded design specs */
         .launch-btn {
-            display: inline-block; background: var(--electric-lilac); color: white; border: none; 
-            padding: 18px 40px; border-radius: 16px; font-size: 16px; font-weight: 700; 
-            cursor: pointer; text-decoration: none; box-shadow: 0 10px 30px rgba(129, 140, 248, 0.3); 
-            transition: transform 0.1s;
+            display: inline-block; 
+            background: var(--electric-lilac); 
+            color: #ffffff; 
+            border: none; 
+            padding: 16px 54px; 
+            border-radius: 20px; 
+            font-size: 16px; 
+            font-weight: 700; 
+            letter-spacing: -0.2px;
+            text-decoration: none; 
+            box-shadow: 0 12px 36px rgba(192, 132, 252, 0.25); 
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
         }
-        .launch-btn:active { transform: scale(0.98); }
+        .launch-btn:active { 
+            transform: scale(0.98); 
+            box-shadow: 0 6px 20px rgba(192, 132, 252, 0.2);
+        }
         footer { font-size: 11px; color: var(--text-secondary); font-weight: 700; margin-top: 60px; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
@@ -67,16 +83,16 @@
             Corporate platforms use hidden rules to control what you buy. We give you back the dashboard. Set your parameters, scan any link, and match products directly to your baseline profile.
         </p>
 
-        <center>
+        <div class="preview-wrapper">
             <div class="preview-mini-panel">
                 <span class="preview-title">Interactive Engine Preview</span>
                 <div class="preview-row"><span>🍃 Cruelty-Free</span><div class="preview-bar"><div class="preview-fill" style="width: 85%;"></div></div></div>
                 <div class="preview-row"><span>🧪 Clean Ingredients</span><div class="preview-bar"><div class="preview-fill" style="width: 90%;"></div></div></div>
                 <div class="preview-row"><span>📦 Low-Waste Pack</span><div class="preview-bar"><div class="preview-fill" style="width: 25%;"></div></div></div>
             </div>
-        </center>
+        </div>
 
-        <a href="signup.html" class="btn">Get Started</a>
+        <a href="signup.html" class="launch-btn">Get Started</a>
     </main>
     <footer>AI-Powered Value Alignment System</footer>
 </div>
