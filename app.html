@@ -3,52 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YourValueMatch Engine</title>
+    <title>YourValueMatch | Core Engine</title>
     <style>
-        /* ... [Keep all previous CSS styles] ... */
-        /* ADD THIS SPECIFIC FIX TO YOUR CSS: */
-        .action-btn { 
-            background: var(--electric-lilac); color: white; border: none; 
-            padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 700; 
-            cursor: pointer; position: relative; z-index: 1000; 
-            pointer-events: auto; /* Ensures clickability */
+        :root {
+            --bg-canvas: #faf9f6; --card-surface: #ffffff; --text-primary: #0f172a;
+            --electric-lilac: linear-gradient(135deg, #c084fc 0%, #818cf8 100%);
+            --border-ui: rgba(129, 140, 248, 0.15); --match-green: #22c55e;
         }
+        body { margin: 0; font-family: -apple-system, sans-serif; background-color: var(--bg-canvas); color: var(--text-primary); }
+        .app-container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 32px; box-sizing: border-box; }
+        .workspace-grid { display: grid; grid-template-columns: 320px 1fr; gap: 32px; }
+        .sidebar { background: white; padding: 24px; border-radius: 24px; border: 1px solid var(--border-ui); }
+        .hero-card { background: white; padding: 24px; border-radius: 24px; border: 1px solid var(--border-ui); margin-bottom: 24px; }
+        .alternative-card { background: white; padding: 24px; border-radius: 24px; border: 1px solid var(--border-ui); margin-bottom: 16px; }
+        .action-btn { background: #818cf8; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; width: 100%; }
+        .slider { width: 100%; margin: 10px 0; }
+        @media (max-width: 768px) { .workspace-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <main id="onboardingWrapper">
-        <div class="setup-card">
-            <h2>Configure Your Matrix Profile</h2>
-            <button class="action-btn" id="submitSetupBtn" style="pointer-events: auto;">Create Profile & Build Engine</button>
-        </div>
-    </main>
+    <header style="margin-bottom: 32px;">
+        <h1 style="margin:0;">YourValueMatch Engine</h1>
+    </header>
 
-    <main id="workspaceWrapper" style="display:none;">
-        </main>
+    <div class="workspace-grid">
+        <div class="sidebar">
+            <h3>Matrix Controls</h3>
+            <label>Product URL</label>
+            <input type="text" id="urlInput" value="https://amazon.co.uk/burts-bees" style="width:100%; padding:8px; margin: 8px 0 16px 0;">
+            <button class="action-btn" onclick="recalibrateMatrix()">Scan URL</button>
+            
+            <div style="margin-top: 24px;">
+                <label>Cruelty-Free (%)</label>
+                <input type="range" id="s1" class="slider" value="88">
+                <label>Clean Ingredients (%)</label>
+                <input type="range" id="s2" class="slider" value="100">
+                <label>Low-Waste (%)</label>
+                <input type="range" id="s3" class="slider" value="12">
+            </div>
+        </div>
+
+        <div>
+            <div class="hero-card">
+                <h2>Product Analysis</h2>
+                <p id="productName">Burt's Bees Lip Balm</p>
+                <h2 id="matchScore" style="color: var(--match-green);">35% Match</h2>
+            </div>
+            <div id="alternatives"></div>
+        </div>
+    </div>
 </div>
 
 <script>
-    // REPLACEMENT SCRIPT BLOCK
-    document.getElementById('submitSetupBtn').addEventListener('click', function(e) {
-        e.preventDefault(); // Prevents form submission
-        e.stopPropagation(); // Stops event bubbling
+    const catalog = [
+        { name: "Hurraw! Balm", score: 96, price: "£4.10" },
+        { name: "Dr. Bronner's", score: 91, price: "£3.75" },
+        { name: "Beauty Kitchen", score: 88, price: "£4.50" }
+    ];
+
+    function recalibrateMatrix() {
+        const s1 = document.getElementById('s1').value;
+        const scoreLabel = document.getElementById('matchScore');
+        scoreLabel.innerText = (100 - (100 - s1) / 2) + "% Match";
         
-        const emailValue = document.getElementById('userEmailField').value.trim();
-        if(!emailValue || !emailValue.includes('@')) {
-            alert('Please input a valid email address.');
-            return;
-        }
-        
-        // Save and Transition
-        localStorage.setItem('vm_active_user_email', emailValue);
-        document.getElementById('onboardingWrapper').style.display = 'none';
-        document.getElementById('workspaceWrapper').style.display = 'flex';
-        
-        // Trigger initialization
-        if(typeof recalibrateMatrix === 'function') recalibrateMatrix();
-    });
+        const container = document.getElementById('alternatives');
+        container.innerHTML = catalog.map(item => `
+            <div class="alternative-card">
+                <h3>${item.name}</h3>
+                <p>Price: ${item.price} | Match: ${item.score}%</p>
+                <button class="action-btn">Swap to ${item.name}</button>
+            </div>
+        `).join('');
+    }
+
+    // Initialize on load
+    window.onload = recalibrateMatrix;
 </script>
 </body>
 </html>
