@@ -6,22 +6,21 @@
     <title>YourValueMatch | Hack Your Shopping Algorithm</title>
     <style>
         :root {
-            --bg-canvas: #fdfbf7; /* Premium soft off-white */
+            --bg-canvas: #faf9f6; /* Luminous soft canvas white */
             --card-surface: #ffffff;
-            --text-primary: #1e1b4b; /* Deep slate indigo */
-            --electric-lilac: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
-            --lilac-glow: rgba(168, 85, 247, 0.15);
+            --text-primary: #0f172a;
+            --electric-lilac: linear-gradient(135deg, #c084fc 0%, #818cf8 100%);
             
-            /* Luminous Matrix Percentage Gradients */
-            --match-high: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); /* Radiant Green */
-            --match-mid: linear-gradient(135deg, #fb923c 0%, #f97316 100%);  /* Luminous Orange */
-            --match-low: linear-gradient(135deg, #f87171 0%, #ef4444 100%);  /* Vibrant Red */
+            /* Luminous Traffic Light Gradients */
+            --match-high: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            --match-mid: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+            --match-low: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
             background-color: var(--bg-canvas);
             color: var(--text-primary);
             display: flex;
@@ -33,107 +32,114 @@
             max-width: 440px;
             min-height: 100vh;
             background: var(--card-surface);
-            padding: 28px;
+            padding: 32px 24px;
             box-sizing: border-box;
-            border-left: 1px solid rgba(99, 102, 241, 0.08);
-            border-right: 1px solid rgba(99, 102, 241, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
         }
 
         header {
             text-align: center;
-            margin-bottom: 36px;
+            margin-bottom: 40px;
         }
 
         .logo {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 800;
             background: var(--electric-lilac);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -0.8px;
+            letter-spacing: -1px;
         }
 
         .context-badge {
             display: inline-block;
-            margin-top: 8px;
-            padding: 6px 14px;
-            border-radius: 20px;
-            background: var(--lilac-glow);
-            color: #6366f1;
-            font-size: 12px;
+            margin-top: 10px;
+            padding: 6px 16px;
+            border-radius: 30px;
+            background: rgba(129, 140, 248, 0.08);
+            color: #4f46e5;
+            font-size: 13px;
             font-weight: 600;
+            letter-spacing: -0.2px;
         }
 
-        /* Luminous Score Preview Card */
+        /* Luminous Score Visualization */
         .live-preview-card {
             background: #ffffff;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 32px;
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 36px;
             text-align: center;
-            border: 1px solid rgba(168, 85, 247, 0.12);
-            box-shadow: 0 10px 25px -5px var(--lilac-glow);
+            border: 1px solid rgba(168, 85, 247, 0.08);
+            position: relative;
         }
 
         .preview-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            color: #64748b;
-            margin-bottom: 8px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
         }
 
         .score-circle {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            margin: 0 auto 12px auto;
+            margin: 0 auto 14px auto;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 800;
-            background: var(--match-high);
-            box-shadow: 0 4px 14px rgba(74, 222, 128, 0.4);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--match-low);
+            box-shadow: 0 8px 20px rgba(248, 113, 113, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .slider-wrapper {
-            margin-bottom: 28px;
+            margin-bottom: 30px;
         }
 
         .slider-meta {
             display: flex;
             justify-content: space-between;
             font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 10px;
-            letter-spacing: -0.2px;
+            font-size: 15px;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .slider-percentage {
+            color: #818cf8;
+            font-weight: 700;
         }
 
         .slider-input {
             width: 100%;
             height: 6px;
-            border-radius: 10px;
-            background: #f1f5f9;
+            border-radius: 20px;
+            background: #f8f6f2;
             outline: none;
             -webkit-appearance: none;
+            cursor: pointer;
         }
 
         .slider-input::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             background: #ffffff;
-            border: 4px solid #a855f7;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(168, 85, 247, 0.3);
-            transition: transform 0.1s ease;
+            border: 4.5px solid #818cf8;
+            box-shadow: 0 4px 12px rgba(129, 140, 248, 0.25);
+            transition: transform 0.1s ease, border-color 0.2s ease;
         }
 
         .slider-input::-webkit-slider-thumb:active {
-            transform: scale(1.2);
+            transform: scale(1.15);
         }
 
         .primary-action {
@@ -143,19 +149,19 @@
             color: white;
             text-align: center;
             padding: 16px;
-            border-radius: 12px;
+            border-radius: 14px;
             font-weight: 700;
             border: none;
             font-size: 16px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+            box-shadow: 0 8px 24px rgba(129, 140, 248, 0.2);
             transition: all 0.2s ease;
-            margin-top: 40px;
+            margin-top: 44px;
+            letter-spacing: -0.2px;
         }
 
         .primary-action:active {
             transform: scale(0.98);
-            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
         }
     </style>
 </head>
@@ -164,48 +170,47 @@
 <div class="app-container">
     <header>
         <div class="logo">YourValueMatch</div>
-        <div id="algoModeBadge" class="context-badge">Customizing Your Algorithm</div>
+        <div id="algoModeBadge" class="context-badge">Setting General Profile</div>
     </header>
 
     <div class="live-preview-card">
-        <div class="preview-title">Live Match Alignment Potential</div>
-        <div class="score-circle" id="luminousScore">100%</div>
-        <div style="font-size: 12px; color: #64748b;" id="poolFeedback">Energy Units Remaining: 10</div>
+        <div class="preview-title">Current Engine Focus</div>
+        <div class="score-circle" id="luminousScore">0%</div>
+        <div style="font-size: 13px; color: #64748b; margin-top: 6px;" id="statusText">Sliders are fully customizable</div>
     </div>
 
     <div class="slider-wrapper">
-        <div class="slider-meta"><span>🌿 Planet First</span><span id="val1">0</span></div>
-        <input type="range" min="0" max="10" value="0" class="slider-input" id="track1">
+        <div class="slider-meta"><span>🌿 Planet First</span><span class="slider-percentage" id="val1">0%</span></div>
+        <input type="range" min="0" max="100" value="0" class="slider-input" id="track1">
     </div>
 
     <div class="slider-wrapper">
-        <div class="slider-meta"><span>🤝 Conscious Craft</span><span id="val2">0</span></div>
-        <input type="range" min="0" max="10" value="0" class="slider-input" id="track2">
+        <div class="slider-meta"><span>🤝 Conscious Craft</span><span class="slider-percentage" id="val2">0%</span></div>
+        <input type="range" min="0" max="100" value="0" class="slider-input" id="track2">
     </div>
 
     <div class="slider-wrapper">
-        <div class="slider-meta"><span>🐰 Kind Living</span><span id="val3">0</span></div>
-        <input type="range" min="0" max="10" value="0" class="slider-input" id="track3">
+        <div class="slider-meta"><span>🐰 Kind Living</span><span class="slider-percentage" id="val3">0%</span></div>
+        <input type="range" min="0" max="100" value="0" class="slider-input" id="track3">
     </div>
 
     <div class="slider-wrapper">
-        <div class="slider-meta"><span>📉 Smart Spender</span><span id="val4">0</span></div>
-        <input type="range" min="0" max="10" value="0" class="slider-input" id="track4">
+        <div class="slider-meta"><span>📉 Smart Spender</span><span class="slider-percentage" id="val4">0%</span></div>
+        <input type="range" min="0" max="100" value="0" class="slider-input" id="track4">
     </div>
 
-    <button class="primary-action" id="lockMatrixBtn">Lock Matrix & Shop Feed</button>
+    <button class="primary-action" id="lockMatrixBtn">Lock Algorithm & Launch Feed</button>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Parse URL parameters to dynamically display influencer context safely
+        // Automatically check if the user arrived via a tracking link
         const urlParams = new URLSearchParams(window.location.search);
         const creator = urlParams.get('ref');
         if (creator) {
-            document.getElementById('algoModeBadge').textContent = `Hacking ${creator}'s Shopping Matrix`;
+            document.getElementById('algoModeBadge').textContent = `Tuning ${creator}'s Vibe Matrix`;
         }
 
-        const MAX_POOL = 10;
         const tracks = [
             { el: document.getElementById('track1'), out: document.getElementById('val1') },
             { el: document.getElementById('track2'), out: document.getElementById('val2') },
@@ -213,42 +218,44 @@
             { el: document.getElementById('track4'), out: document.getElementById('val4') }
         ];
         const scoreCircle = document.getElementById('luminousScore');
-        const feedback = document.getElementById('poolFeedback');
+        const statusText = document.getElementById('statusText');
 
-        function dynamicBalance(changedIdx) {
-            let sum = 0;
-            tracks.forEach(t => sum += parseInt(t.el.value));
+        function calculateLuminousMetrics() {
+            let total = 0;
+            tracks.forEach(t => {
+                const val = parseInt(t.el.value);
+                total += val;
+                t.out.textContent = `${val}%`;
+            });
 
-            if (sum > MAX_POOL) {
-                const delta = sum - MAX_POOL;
-                tracks[changedIdx].el.value = parseInt(tracks[changedIdx].el.value) - delta;
-                sum = MAX_POOL;
-            }
+            // Find the true mathematical average of the user's current intent
+            let averageScore = Math.round(total / 4);
+            scoreCircle.textContent = `${averageScore}%`;
 
-            const leftover = MAX_POOL - sum;
-            feedback.textContent = `Energy Units Remaining: ${leftover}`;
-            tracks.forEach(t => t.out.textContent = t.el.value);
-
-            // Dynamic Luminous Traffic Light Gradient Shifts
-            // Higher points allocated to ethical targets = Higher alignment percentage displays
-            let calculatedPct = Math.round((sum / MAX_POOL) * 100);
-            scoreCircle.textContent = `${calculatedPct}%`;
-
-            if (calculatedPct >= 75) {
+            // Fluid color-scale shifts based on overall alignment intensity
+            if (averageScore >= 70) {
                 scoreCircle.style.background = 'var(--match-high)';
-                scoreCircle.style.boxShadow = '0 6px 16px rgba(74, 222, 128, 0.4)';
-            } else if (calculatedPct >= 40) {
+                scoreCircle.style.boxShadow = '0 8px 24px rgba(74, 222, 128, 0.35)';
+                statusText.textContent = "High Intensity Alignment Mode";
+            } else if (averageScore >= 35) {
                 scoreCircle.style.background = 'var(--match-mid)';
-                scoreCircle.style.boxShadow = '0 6px 16px rgba(251, 146, 60, 0.4)';
+                scoreCircle.style.boxShadow = '0 8px 24px rgba(251, 146, 60, 0.35)';
+                statusText.textContent = "Balanced Hybrid Alignment Mode";
             } else {
                 scoreCircle.style.background = 'var(--match-low)';
-                scoreCircle.style.boxShadow = '0 6px 16px rgba(248, 113, 113, 0.4)';
+                scoreCircle.style.boxShadow = '0 8px 24px rgba(248, 113, 113, 0.35)';
+                statusText.textContent = "Standard Utility Focus";
             }
         }
 
-        tracks.forEach((track, i) => {
-            track.el.addEventListener('input', () => dynamicBalance(i));
+        // Attach direct, independent input tracks
+        tracks.forEach(track => {
+            track.el.addEventListener('input', calculateLuminousMetrics);
         });
-    </script>
+        
+        // Run initial configuration load
+        calculateLuminousMetrics();
+    });
+</script>
 </body>
 </html>
