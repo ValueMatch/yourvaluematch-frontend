@@ -3,128 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YourValueMatch | Tune Your Shopping Algorithm</title>
+    <title>YourValueMatch | Hack Your Shopping Algorithm</title>
     <style>
         :root {
-            --bg-primary: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --brand-color: #2563eb;
-            --accent-green: #16a34a;
+            --bg-canvas: #fdfbf7; /* Premium soft off-white */
+            --card-surface: #ffffff;
+            --text-primary: #1e1b4b; /* Deep slate indigo */
+            --electric-lilac: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            --lilac-glow: rgba(168, 85, 247, 0.15);
+            
+            /* Luminous Matrix Percentage Gradients */
+            --match-high: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); /* Radiant Green */
+            --match-mid: linear-gradient(135deg, #fb923c 0%, #f97316 100%);  /* Luminous Orange */
+            --match-low: linear-gradient(135deg, #f87171 0%, #ef4444 100%);  /* Vibrant Red */
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Roboto, sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--text-primary);
             display: flex;
             justify-content: center;
         }
 
         .app-container {
             width: 100%;
-            max-width: 480px;
+            max-width: 440px;
             min-height: 100vh;
-            background: var(--card-bg);
-            padding: 24px;
+            background: var(--card-surface);
+            padding: 28px;
             box-sizing: border-box;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            position: relative;
+            border-left: 1px solid rgba(99, 102, 241, 0.08);
+            border-right: 1px solid rgba(99, 102, 241, 0.08);
         }
 
         header {
-            margin-bottom: 32px;
             text-align: center;
+            margin-bottom: 36px;
         }
 
         .logo {
+            font-size: 26px;
+            font-weight: 800;
+            background: var(--electric-lilac);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.8px;
+        }
+
+        .context-badge {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: var(--lilac-glow);
+            color: #6366f1;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Luminous Score Preview Card */
+        .live-preview-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 32px;
+            text-align: center;
+            border: 1px solid rgba(168, 85, 247, 0.12);
+            box-shadow: 0 10px 25px -5px var(--lilac-glow);
+        }
+
+        .preview-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 12px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
             font-size: 24px;
             font-weight: 800;
-            color: var(--brand-color);
-            letter-spacing: -0.5px;
+            background: var(--match-high);
+            box-shadow: 0 4px 14px rgba(74, 222, 128, 0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .tagline {
-            font-size: 14px;
-            color: #64748b;
-            margin-top: 4px;
+        .slider-wrapper {
+            margin-bottom: 28px;
         }
 
-        .token-pool-card {
-            background: #f1f5f9;
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .token-count {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--brand-color);
-        }
-
-        .slider-group {
-            margin-bottom: 24px;
-        }
-
-        .slider-header {
+        .slider-meta {
             display: flex;
             justify-content: space-between;
             font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 15px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            letter-spacing: -0.2px;
         }
 
-        .value-slider {
+        .slider-input {
             width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            background: #e2e8f0;
+            height: 6px;
+            border-radius: 10px;
+            background: #f1f5f9;
             outline: none;
             -webkit-appearance: none;
         }
 
-        .value-slider::-webkit-slider-thumb {
+        .slider-input::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
-            background: var(--brand-color);
+            background: #ffffff;
+            border: 4px solid #a855f7;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(168, 85, 247, 0.3);
+            transition: transform 0.1s ease;
         }
 
-        .action-btn {
+        .slider-input::-webkit-slider-thumb:active {
+            transform: scale(1.2);
+        }
+
+        .primary-action {
             display: block;
             width: 100%;
-            background: var(--brand-color);
+            background: var(--electric-lilac);
             color: white;
             text-align: center;
-            padding: 14px;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
             border: none;
             font-size: 16px;
             cursor: pointer;
-            margin-top: 32px;
-        }
-
-        .extension-upsell {
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+            transition: all 0.2s ease;
             margin-top: 40px;
-            border-top: 1px dashed #e2e8f0;
-            padding-top: 24px;
-            text-align: center;
         }
 
-        .ext-link {
-            color: var(--brand-color);
-            font-weight: 600;
-            text-decoration: none;
-            font-size: 14px;
+        .primary-action:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
         }
     </style>
 </head>
@@ -133,43 +164,91 @@
 <div class="app-container">
     <header>
         <div class="logo">YourValueMatch</div>
-        <div class="tagline">Dynamic AI Shopping Intelligence</div>
+        <div id="algoModeBadge" class="context-badge">Customizing Your Algorithm</div>
     </header>
 
-    <div class="token-pool-card">
-        <div class="slider-header"><span>Algorithm Energy Remaining:</span></div>
-        <div class="token-count" id="tokenPool">10</div>
-        <p style="font-size: 12px; color: #64748b; margin: 4px 0 0 0;">Distribute tokens to prioritize metrics for your current shop session.</p>
+    <div class="live-preview-card">
+        <div class="preview-title">Live Match Alignment Potential</div>
+        <div class="score-circle" id="luminousScore">100%</div>
+        <div style="font-size: 12px; color: #64748b;" id="poolFeedback">Energy Units Remaining: 10</div>
     </div>
 
-    <div class="slider-group">
-        <div class="slider-header"><span>🌿 Sustainability & Carbon</span><span id="val1-display">0</span></div>
-        <input type="range" min="0" max="10" value="0" class="value-slider" id="slider1">
+    <div class="slider-wrapper">
+        <div class="slider-meta"><span>🌿 Planet First</span><span id="val1">0</span></div>
+        <input type="range" min="0" max="10" value="0" class="slider-input" id="track1">
     </div>
 
-    <div class="slider-group">
-        <div class="slider-header"><span>🛠️ Ethical Labor & Wages</span><span id="val2-display">0</span></div>
-        <input type="range" min="0" max="10" value="0" class="value-slider" id="slider2">
+    <div class="slider-wrapper">
+        <div class="slider-meta"><span>🤝 Conscious Craft</span><span id="val2">0</span></div>
+        <input type="range" min="0" max="10" value="0" class="slider-input" id="track2">
     </div>
 
-    <div class="slider-group">
-        <div class="slider-header"><span>🐰 Cruelty-Free & Vegan</span><span id="val3-display">0</span></div>
-        <input type="range" min="0" max="10" value="0" class="value-slider" id="slider3">
+    <div class="slider-wrapper">
+        <div class="slider-meta"><span>🐰 Kind Living</span><span id="val3">0</span></div>
+        <input type="range" min="0" max="10" value="0" class="slider-input" id="track3">
     </div>
 
-    <div class="slider-group">
-        <div class="slider-header"><span>📉 Price & Budget Focus</span><span id="val4-display">0</span></div>
-        <input type="range" min="0" max="10" value="0" class="value-slider" id="slider4">
+    <div class="slider-wrapper">
+        <div class="slider-meta"><span>📉 Smart Spender</span><span id="val4">0</span></div>
+        <input type="range" min="0" max="10" value="0" class="slider-input" id="track4">
     </div>
 
-    <button class="action-btn" id="saveAlgoBtn">Lock Session Algorithm</button>
-
-    <div class="extension-upsell">
-        <p style="font-size: 13px; color: #64748b; margin-bottom: 8px;">Shopping on a laptop or desktop?</p>
-        <a href="#" class="ext-link">⚡ Download the Chrome Extension Add-on</a>
-    </div>
+    <button class="primary-action" id="lockMatrixBtn">Lock Matrix & Shop Feed</button>
 </div>
 
-<script src="app.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Parse URL parameters to dynamically display influencer context safely
+        const urlParams = new URLSearchParams(window.location.search);
+        const creator = urlParams.get('ref');
+        if (creator) {
+            document.getElementById('algoModeBadge').textContent = `Hacking ${creator}'s Shopping Matrix`;
+        }
+
+        const MAX_POOL = 10;
+        const tracks = [
+            { el: document.getElementById('track1'), out: document.getElementById('val1') },
+            { el: document.getElementById('track2'), out: document.getElementById('val2') },
+            { el: document.getElementById('track3'), out: document.getElementById('val3') },
+            { el: document.getElementById('track4'), out: document.getElementById('val4') }
+        ];
+        const scoreCircle = document.getElementById('luminousScore');
+        const feedback = document.getElementById('poolFeedback');
+
+        function dynamicBalance(changedIdx) {
+            let sum = 0;
+            tracks.forEach(t => sum += parseInt(t.el.value));
+
+            if (sum > MAX_POOL) {
+                const delta = sum - MAX_POOL;
+                tracks[changedIdx].el.value = parseInt(tracks[changedIdx].el.value) - delta;
+                sum = MAX_POOL;
+            }
+
+            const leftover = MAX_POOL - sum;
+            feedback.textContent = `Energy Units Remaining: ${leftover}`;
+            tracks.forEach(t => t.out.textContent = t.el.value);
+
+            // Dynamic Luminous Traffic Light Gradient Shifts
+            // Higher points allocated to ethical targets = Higher alignment percentage displays
+            let calculatedPct = Math.round((sum / MAX_POOL) * 100);
+            scoreCircle.textContent = `${calculatedPct}%`;
+
+            if (calculatedPct >= 75) {
+                scoreCircle.style.background = 'var(--match-high)';
+                scoreCircle.style.boxShadow = '0 6px 16px rgba(74, 222, 128, 0.4)';
+            } else if (calculatedPct >= 40) {
+                scoreCircle.style.background = 'var(--match-mid)';
+                scoreCircle.style.boxShadow = '0 6px 16px rgba(251, 146, 60, 0.4)';
+            } else {
+                scoreCircle.style.background = 'var(--match-low)';
+                scoreCircle.style.boxShadow = '0 6px 16px rgba(248, 113, 113, 0.4)';
+            }
+        }
+
+        tracks.forEach((track, i) => {
+            track.el.addEventListener('input', () => dynamicBalance(i));
+        });
+    </script>
 </body>
 </html>
