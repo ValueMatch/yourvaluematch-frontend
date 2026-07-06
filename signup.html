@@ -126,9 +126,11 @@
             
             // Safe Write Execution Loop Guard
             try {
-        localStorage.setItem('userEmail', emailvalue);
-        localStorage.setItem('userAuthenticated', 'true');
-        localStorage.setItem('vm_initial_pillar', selectedPillar);
+                localStorage.setItem('vm_active_user_email', emailvalue);
+                localStorage.setItem('vm_initial_pillar', selectedPillar);
+                
+                // THE SAFEGUARD: Explicitly issue the production security clearance token
+                localStorage.setItem('userAuthenticated', 'true'); 
             } catch(e) {
                 console.warn("Storage write blocked by browser context rules.");
             }
