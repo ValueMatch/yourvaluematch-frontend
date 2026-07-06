@@ -129,9 +129,17 @@
         }
     }
 
-    // Initialize Page Pipelines on DOM Core Component Mount
+    // Initialize Page Pipelines and Enforce Security Safeguard
     document.addEventListener('DOMContentLoaded', () => {
-        verifyStateHandoffs();
+        const isVerified = localStorage.getItem('userAuthenticated') === 'true';
+        
+        if (!isVerified) {
+            console.warn("⚠️ Absolute Safeguard Triggered: Session missing token. Routing to onboarding.");
+            window.location.href = 'signup.html';
+            return; // Terminate execution loop immediately
+        }
+
+        // Token verified -> safely stream live data layer
         loadLiveDirectory();
 
         const searchButton = document.getElementById('searchSubmitBtn');
