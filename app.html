@@ -4,10 +4,7 @@
     // =========================================================================
     const BACKEND_URL = 'https://yourvaluematch-backend.onrender.com';
     
-    // User Context Configuration
-    const userEmail = localStorage.getItem('userEmail') || 'shopper@yourvaluematch.com';
-
-    // State Elements
+    // UI Elements
     const directoryGrid = document.getElementById('directoryGrid');
     const searchInput = document.getElementById('productSearchInput');
     const matchResultsContainer = document.getElementById('matchResults');
@@ -70,11 +67,14 @@
                 matchResultsContainer.innerHTML = '<div class="loading">AI Agents analyzing brand value alignments...</div>';
             }
 
-            // Gather values slider or checkbox weights from the user interface
+            const userEmail = localStorage.getItem('vm_active_user_email') || 'shopper@yourvaluematch.com';
+            const preferredPillar = localStorage.getItem('vm_initial_pillar') || '';
+
+            // Explicitly match weights against the synchronized signup categories
             const weights = {
-                crueltyFree: document.getElementById('weightCF')?.checked ? 1 : 0,
-                cleanIngredients: document.getElementById('weightCI')?.checked ? 1 : 0,
-                lowWaste: document.getElementById('weightLW')?.checked ? 1 : 0
+                crueltyFree: preferredPillar === 'cruelty_free' ? 1 : 0,
+                cleanIngredients: preferredPillar === 'clean_ingredients' ? 1 : 0,
+                lowWaste: preferredPillar === 'low_waste' ? 1 : 0
             };
 
             const response = await fetch(`${BACKEND_URL}/api/analyze`, {
@@ -118,28 +118,17 @@
         }
     }
 
-    // 3. CLEAN FILE ROUTING: Session Handshake & Direct Redirection Rules
-    function verifyStateHandoffs() {
-        const path = window.location.pathname;
-        
-        // Ensure user state persistency across HTML splits without breaking engine flows
-        if (path.includes('app') && !localStorage.getItem('userAuthenticated')) {
-            console.log("⚠️ Session invalid. Routing user to sign up step.");
-            window.location.href = './signup.html';
-        }
-    }
-
-    // Initialize Page Pipelines and Enforce Security Safeguard
+    // Initialize Page Pipelines and Enforce Security Safeguard Safely
     document.addEventListener('DOMContentLoaded', () => {
         const isVerified = localStorage.getItem('userAuthenticated') === 'true';
         
         if (!isVerified) {
-            console.warn("⚠️ Absolute Safeguard Triggered: Session missing token. Routing to onboarding.");
+            console.warn("⚠️ Absolute Safeguard Triggered: Session missing token. Routing to signup.");
             window.location.href = 'signup.html';
-            return; // Terminate execution loop immediately
+            return; 
         }
 
-        // Token verified -> safely stream live data layer
+        // Token verified -> load data layer
         loadLiveDirectory();
 
         const searchButton = document.getElementById('searchSubmitBtn');
