@@ -227,9 +227,9 @@
 
         // Standardized safety block check ensuring string values are verified before calling prototype actions
         if (savedEmail && typeof savedEmail === 'string' && savedEmail.indexOf('@') !== -1) {
-            activeProfileLabel.textContent = `ACTIVE PROFILE:\n${savedEmail.toUpperCase()}`;
+        activeProfileLabel.innerHTML = `ACTIVE PROFILE:<br><span style="color: #0f172a; font-size: 12px; font-weight: 700; text-transform: none; display: block; margin-top: 4px;">${savedEmail}</span>`;
         } else {
-            activeProfileLabel.textContent = "ACTIVE PROFILE: GUEST MATRIX";
+        activeProfileLabel.innerHTML = "ACTIVE PROFILE:<br><span style="color: #0f172a; font-size: 12px; font-weight: 700; display: block; margin-top: 4px;">GUEST MATRIX</span>";
         }
 
         function updateColorClass(element, score) {
