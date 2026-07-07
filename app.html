@@ -338,44 +338,61 @@
         sliders.forEach(function(s) { s.addEventListener('input', recalibrateMatrix); });
         recalibrateMatrix();
 
-        // TELEMETRY INTERCEPT LOOP: Captures current matrix metrics right at the action moment
-        async function sendMatrixTelemetry(targetAlternative) {
-            if (!savedEmail) return;
+       // TELEMETRY INTERCEPT LOOP: Captures current matrix metrics right at the action moment
+async function sendMatrixTelemetry(targetAlternative) {
+    // 1. Resolve identity: Fallback safely to 'GUEST MATRIX' if savedEmail doesn't exist
+    const currentEmail = savedEmail || "GUEST MATRIX";
 
-            const matrixPayload = {
-                email: savedEmail,
-                cleanIngredientsScore: parseInt(sliders[1].value) || 0,
-                ethicalLaborScore: parseInt(sliders[0].value) || 0, // Maps Leaping Bunny tracking inputs
-                crueltyFreeScore: parseInt(sliders[0].value) || 0,
-                lowWasteScore: parseInt(sliders[2].value) || 0
-            };
+    // 2. Map payload cleanly matching your user_click_logs table schema
+    const matrixPayload = {
+        email: currentEmail,
+        clicked_product: targetAlternative,
+        // Match sliders safely based on your UI sequence (0: Cruelty-Free, 1: Clean Ingredients, 2: Low-Waste)
+        cruelty_free_score: parseInt(sliders[0]?.value) || 0,
+        clean_ingredients_score: parseInt(sliders[1]?.value) || 0,
+        low_waste_score: parseInt(sliders[2]?.value) || 0,
+        // Optional default or placeholder value for your ethical labor column
+        ethical_labor_score: 0 
+    };
 
-            console.log("Transmitting dynamic value metrics to database layers...", matrixPayload);
+    console.log("Transmitting dynamic value metrics to database layers...", matrixPayload);
 
-            try {
-                await fetch(`${RENDER_BASE_URL}/api/update-user-matrix`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(matrixPayload),
-                    keepalive: true
-                });
-                console.log("Database update committed successfully.");
-            } catch (err) {
-                console.error("Telemetry channel link deferred:", err);
-            }
-        }
-
-        // Catch click routing events transparently
-        alternativesContainer.addEventListener('click', (e) => {
-            if (e.target.classList.contains('swap-button')) {
-                const alternativeName = e.target.getAttribute('data-product-name');
-                
-                // Fire real-time matrix update weights to PostgreSQL cluster prior to checkout redirection
-                sendMatrixTelemetry(alternativeName);
-                
-                alert(`Routing alternative tracking parameters via Sovrn integration loops for: ${alternativeName}`);
-            }
+    try {
+        // Change this path to match your dedicated click routing endpoint on Render
+        await fetch(`${RENDER_BASE_URL}/api/logs/click`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(matrixPayload),
+            keepalive: true
         });
+        console.log("Database transaction log update committed successfully.");
+    } catch (err) {
+        console.error("Telemetry channel link deferred:", err);
+    }
+}
+
+// Catch click routing events transparently
+alternativesContainer.addEventListener('click', async (e) => {
+    if (e.target.classList.contains('swap-button')) {
+        const alternativeName = e.target.getAttribute('data-product-name');
+
+        // 1. Fire real-time matrix update weights to PostgreSQL cluster prior to checkout redirection
+        // Using await ensures the database log completes before the page starts navigating away
+        await sendMatrixTelemetry(alternativeName);
+
+        // 2. Execute live Sovrn affiliate tracking redirect mapping
+        const selectedProduct = sovrnMerchantCatalog.find(p => p.name === alternativeName);
+        const destinationUrl = selectedProduct ? selectedProduct.targetUrl : "https://www.google.com";
+        
+        const SOVRN_API_KEY = "YOUR_SOVRN_API_KEY"; // Swap this with your actual key when ready
+        const userTrackingId = encodeURIComponent(savedEmail || "GUEST MATRIX");
+
+        const liveAffiliateRedirectUrl = `https://redirect.viglink.com?key=${SOVRN_API_KEY}&u=${encodeURIComponent(destinationUrl)}&cuid=${userTrackingId}`;
+
+        console.log("Routing session through live Sovrn monetization engine...");
+        window.location.href = liveAffiliateRedirectUrl;
+    }
+});
 
         document.getElementById('triggerScanBtn').addEventListener('click', function() {
             const path = document.getElementById('itemUrlInput').value.trim();
