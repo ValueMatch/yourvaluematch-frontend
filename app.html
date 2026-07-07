@@ -211,40 +211,79 @@
         }
     ];
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const activeProfileLabel = document.getElementById('activeProfileLabel');
-        const resetEntireSessionLink = document.getElementById('resetEntireSessionLink');
-        const sliders = [document.getElementById('sl1'), document.getElementById('sl2'), document.getElementById('sl3')];
-        const outputs = [document.getElementById('vVal1'), document.getElementById('vVal2'), document.getElementById('vVal3')];
-        const scoreLabel = document.getElementById('computedScoreLabel');
-        const alternativesContainer = document.getElementById('alternativesContainer');
+document.addEventListener('DOMContentLoaded', () => {
+    const activeProfileLabel = document.getElementById('activeProfileLabel');
+    const resetEntireSessionLink = document.getElementById('resetEntireSessionLink');
+    const sliders = [document.getElementById('s11'), document.getElementById('s12'), document.getElementById('s13')];
+    const outputs = [document.getElementById('vVal1'), document.getElementById('vVal2'), document.getElementById('vVal3')];
+    const scoreLabel = document.getElementById('computedScoreLabel');
+    const alternativesContainer = document.getElementById('alternativesContainer');
+    
+    // UI Elements for Guest Conversion
+    const guestPanel = document.getElementById('guestConversionPanel');
+    const saveBtn = document.getElementById('saveProfileBtn');
 
-        // FIX: Pulling user identity accurately using the same token key set during onboarding configuration
-        let savedEmail = "";
-        try {
-            savedEmail = localStorage.getItem('userEmail') || "";
-        } catch(e) {
-            console.warn("Storage context read warning.");
+    // 1. Identity Logic
+    let savedEmail = "";
+    try {
+        savedEmail = localStorage.getItem('userEmail') || "";
+    } catch(e) { console.warn("Storage context read warning."); }
+
+    if (savedEmail && typeof savedEmail === 'string' && savedEmail.includes('@')) {
+        activeProfileLabel.innerHTML = 'ACTIVE PROFILE:<br><span style="color: #818cf8; font-size: 12px; font-weight: 700; display: block; margin-top: 4px; word-break: break-all;">' + savedEmail + '</span>';
+        if (guestPanel) guestPanel.style.display = 'none';
+    } else {
+        activeProfileLabel.innerHTML = 'ACTIVE PROFILE:<br><span style="color: #64748b; font-size: 12px; font-weight: 700; display: block; margin-top: 4px;">GUEST</span>';
+        if (guestPanel) guestPanel.style.display = 'block';
+    }
+
+    // 2. Onboarding Sync Logic
+    try {
+        const signupPillar = localStorage.getItem('vm_initial_pillar');
+        if (signupPillar === 'clean') {
+            sliders[1].value = 100;
+            sliders[2].value = 20;
+        } else if (signupPillar === 'labor') {
+            sliders[0].value = 100;
         }
+    } catch (err) {
+        console.warn("Onboarding matrix synchronization bypassed.");
+    }
 
-        if (savedEmail && typeof savedEmail === 'string' && savedEmail.includes('@')) {
-            activeProfileLabel.innerHTML = 'ACTIVE PROFILE:<br><span style="color: #818cf8; font-size: 12px; font-weight: 700; text-transform: none; display: block; margin-top: 4px; word-break: break-all;">' + savedEmail + '</span>';
-        } else {
-            activeProfileLabel.innerHTML = 'ACTIVE PROFILE:<br><span style="color: #64748b; font-size: 12px; font-weight: 700; display: block; margin-top: 4px;">GUEST MATRIX</span>';
-        }
-
-        // Pushes initial slider values based on what the user clicked during signup onboarding
-        try {
-            const signupPillar = localStorage.getItem('vm_initial_pillar');
-            if (signupPillar === 'clean') {
-                sliders[1].value = 100; // Clean Ingredients
-                sliders[2].value = 20;  // Low Waste Baseline
-            } else if (signupPillar === 'labor') {
-                sliders[0].value = 100; // Cruelty Free / Labor Focus
+    // 3. Guest Conversion Action
+    if (saveBtn) {
+        saveBtn.addEventListener('click', async () => {
+            const emailInput = document.getElementById('conversionEmailInput').value.trim();
+            if (!emailInput || !emailInput.includes('@')) {
+                return alert("Please enter a valid email address.");
             }
-        } catch (err) {
-            console.warn("Onboarding matrix synchronization bypassed.");
-        }
+
+            const payload = {
+                email: emailInput,
+                cruelty_free_score: parseInt(sliders[0]?.value) || 0,
+                clean_ingredients_score: parseInt(sliders[1]?.value) || 0,
+                low_waste_score: parseInt(sliders[2]?.value) || 0
+            };
+
+            try {
+                const response = await fetch(`${RENDER_BASE_URL}/api/update-user-matrix`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    localStorage.setItem('userEmail', emailInput);
+                    alert("Value settings saved successfully!");
+                    activeProfileLabel.innerHTML = 'ACTIVE PROFILE:<br><span style="color: #818cf8; font-size: 12px; font-weight: 700; display: block; margin-top: 4px; word-break: break-all;">' + emailInput + '</span>';
+                    if (guestPanel) guestPanel.style.display = 'none';
+                }
+            } catch (err) {
+                console.error("Sync failed:", err);
+            }
+        });
+    }
+});
 
         function updateColorClass(element, score) {
             if (!element) return;
