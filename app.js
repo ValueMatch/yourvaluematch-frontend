@@ -244,13 +244,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                         priceEl.style.display = 'none'; 
                     }
                 
-                    // --- UPDATE IMAGE ---
-                    if (aiData.image_url) {
-                        const heroImage = document.querySelector('.scanned-hero-card img');
-                        if (heroImage) {
-                            heroImage.src = aiData.image_url;
+                    // --- UPDATE IMAGE WITH FALLBACK ---
+                        if (aiData.image_url) {
+                            const heroImage = document.querySelector('.scanned-hero-card img');
+                            if (heroImage) {
+                                heroImage.src = aiData.image_url;
+                                
+                                // If the retailer blocks hotlinking, seamlessly fall back to our default placeholder
+                                heroImage.onerror = () => {
+                                    heroImage.src = "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=150&q=80";
+                                };
+                            }
                         }
-                    }
                 
                 currentScannedMetrics = [
                     aiData.metrics.clean, aiData.metrics.organic, aiData.metrics.crueltyFree,
