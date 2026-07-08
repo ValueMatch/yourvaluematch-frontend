@@ -1,54 +1,53 @@
-// --- FETCH LIVE PRODUCTS FROM YOUR POSTGRES ENGINE ---
-    try {
-        const res = await fetch(`${RENDER_BASE_URL}/api/products`);
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        
-        const data = await res.json();
-        if (data.success && data.products) {
-            sovrnMerchantCatalog = data.products.map(p => ({
-                name: p.name,
-                price: `£${p.price}`,
-                img: p.image_url || "https://images.unsplash.com/photo-1608248597481-496100c8c836?auto=format&fit=crop&w=150&q=80",
-                metrics: {
-                    clean: p.clean_ingredients_score || 50,
-                    organic: 50, // Default fallback
-                    crueltyFree: p.cruelty_free_score || 50,
-                    vegan: p.cruelty_free_score > 70 ? 90 : 50, // Derived fallback
-                    waste: p.low_waste_score || 50,
-                    climate: p.low_waste_score || 50,
-                    labor: p.ethical_labor_score || 50,
-                    transparency: 60,
-                    indie: 70,
-                    inclusion: 50,
-                    local: 40,
-                    regenerative: 30
-                },
-                evidence: `Verified database asset matching brand tier: ${p.brand_name}. In stock at ${p.merchant_name || 'Partner Merchant'}.`,
-                targetUrl: p.original_url || "https://www.google.com"
-            }));
-            recalibrateAlgorithm(); 
-        }
-    } catch (err) {
-        console.error("Failed to feed live catalog stream:", err);
-    }
-];
+const RENDER_BASE_URL = 'https://yourvaluematch-backend.onrender.com'; // <-- CHANGE THIS TO YOUR LIVE BACKEND URL
+let sovrnMerchantCatalog = []; 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const activeProfileLabel = document.getElementById('activeProfileLabel');
     const guestPanel = document.getElementById('guestConversionPanel');
     const resetEntireSessionLink = document.getElementById('resetEntireSessionLink');
     const scoreLabel = document.getElementById('computedScoreLabel');
     const alternativesContainer = document.getElementById('alternativesContainer');
 
-    // All 12 Sliders and Outputs
     const sliderIds = ['sl_clean', 'sl_organic', 'sl_cruelty', 'sl_vegan', 'sl_waste', 'sl_climate', 'sl_labor', 'sl_transparency', 'sl_indie', 'sl_inclusion', 'sl_local', 'sl_regenerative'];
     const sliders = sliderIds.map(id => document.getElementById(id));
     const outputs = Array.from({length: 12}, (_, i) => document.getElementById(`valOut${i}`));
     
-    // Track the LIVE scanned metrics from Gemini
     let currentScannedMetrics = null;
 
-    // --- THE HANDSHAKE: INJECT SAVED PRESETS ---
+    // --- 1. FETCH LIVE PRODUCTS FROM POSTGRES ---
+    try {
+        const res = await fetch(`${RENDER_BASE_URL}/api/products`);
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success && data.products) {
+                sovrnMerchantCatalog = data.products.map(p => ({
+                    name: p.name,
+                    price: `£${p.price}`,
+                    img: p.image_url || "https://images.unsplash.com/photo-1608248597481-496100c8c836?auto=format&fit=crop&w=150&q=80",
+                    metrics: {
+                        clean: p.clean_ingredients_score || 50,
+                        organic: 50, 
+                        crueltyFree: p.cruelty_free_score || 50,
+                        vegan: p.cruelty_free_score > 70 ? 90 : 50, 
+                        waste: p.low_waste_score || 50,
+                        climate: p.low_waste_score || 50,
+                        labor: p.ethical_labor_score || 50,
+                        transparency: 60,
+                        indie: 70,
+                        inclusion: 50,
+                        local: 40,
+                        regenerative: 30
+                    },
+                    evidence: `Verified database asset matching brand tier: ${p.brand_name}. In stock at ${p.merchant_name || 'Partner Merchant'}.`,
+                    targetUrl: p.original_url || "https://www.google.com"
+                }));
+            }
+        }
+    } catch (err) {
+        console.error("Failed to feed live catalog stream:", err);
+    }
+
+    // --- 2. THE HANDSHAKE: INJECT SAVED PRESETS ---
     const savedScoresJSON = localStorage.getItem('userProfileScores');
     if (savedScoresJSON) {
         const presetScores = JSON.parse(savedScoresJSON);
@@ -59,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 1. IDENTITY CHECK
+    // --- 3. IDENTITY CHECK ---
     const savedEmail = localStorage.getItem('savedEmail');
     if (savedEmail && savedEmail.includes('@')) {
         activeProfileLabel.innerHTML = 'ACTIVE PROFILE:<br><span style="color: #818cf8;">' + savedEmail + '</span>';
@@ -69,20 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (guestPanel) guestPanel.style.display = 'block';
     }
 
-    // 2. GUEST CONVERSION ACTION
-    const saveBtn = document.getElementById('saveProfileBtn');
-    if (saveBtn) {
-        saveBtn.addEventListener('click', () => {
+    if (document.getElementById('saveProfileBtn')) {
+        document.getElementById('saveProfileBtn').addEventListener('click', () => {
             const emailInput = document.getElementById('conversionEmailInput').value.trim();
             if (!emailInput.includes('@')) return alert("Please enter a valid email address.");
-
             localStorage.setItem('savedEmail', emailInput);
             alert("Value settings saved! Your zero-party profile is anchored.");
             window.location.reload(); 
         });
     }
 
-    // 3. UI HELPER FUNCTIONS
+    // --- 4. UI HELPER FUNCTIONS ---
     function updateColorClass(element, score) {
         if (!element) return;
         if (score >= 80) { element.style.color = "var(--match-green)"; } 
@@ -107,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 4. CORE ALGORITHM LOGIC (12-Point Match)
+    // --- 5. CORE ALGORITHM LOGIC ---
     function recalibrateAlgorithm() {
         const userValues = sliders.map(s => parseInt(s.value) || 0);
         
@@ -115,7 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if(outputs[i]) outputs[i].textContent = val + '%';
         });
 
-        // Compute REAL score for the scanned product if AI data exists
         if (currentScannedMetrics) {
             let totalVariance = 0;
             for(let i = 0; i < 12; i++) {
@@ -128,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateColorClass(scoreLabel, finalHeroScore);
         }
 
-        // Compare Catalog Alternatives against 12-point matrix
         let calculatedDirectory = sovrnMerchantCatalog.map(product => {
             const pMetrics = [
                 product.metrics.clean, product.metrics.organic, product.metrics.crueltyFree,
@@ -142,7 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 let importanceMultiplier = (userValues[i] / 100) + 0.5; 
                 totalVariance += Math.abs(pMetrics[i] - userValues[i]) * importanceMultiplier;
             }
-            
             let avgRawVariance = totalVariance / 12;
             let alignmentPercentage = Math.max(10, Math.min(100, Math.round(100 - avgRawVariance)));
             
@@ -176,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button class="swap-button" data-product-name="${product.name}">Swap to ${product.name}</button>
             `;
             alternativesContainer.appendChild(card);
-            
             const currentPill = document.getElementById('scorePill_index_' + idx);
             if (currentPill) { updatePillColor(currentPill, product.computedMatchScore); }
         });
@@ -185,14 +177,12 @@ document.addEventListener('DOMContentLoaded', () => {
     sliders.forEach(s => { if(s) s.addEventListener('input', recalibrateAlgorithm); });
     recalibrateAlgorithm();
 
-    // 5. TELEMETRY LOGGING
+    // --- 6. TELEMETRY & SOVRN ROUTING ---
     async function sendValueTelemetry(targetAlternative) {
         const currentEmail = savedEmail || "GUEST PROFILE";
         const currentValues = sliders.map(s => parseInt(s.value) || 0);
-
         const valuePayload = {
-            email: currentEmail,
-            clicked_product: targetAlternative,
+            email: currentEmail, clicked_product: targetAlternative,
             clean_ingredients_score: currentValues[0], organic_score: currentValues[1],
             cruelty_free_score: currentValues[2], vegan_score: currentValues[3],
             low_waste_score: currentValues[4], climate_impact_score: currentValues[5],
@@ -200,13 +190,9 @@ document.addEventListener('DOMContentLoaded', () => {
             indie_scale_score: currentValues[8], inclusion_score: currentValues[9],
             local_sourcing_score: currentValues[10], regenerative_ag_score: currentValues[11]
         };
-
         try {
             await fetch(`${RENDER_BASE_URL}/api/logs/click`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(valuePayload),
-                keepalive: true
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(valuePayload), keepalive: true
             });
         } catch (err) { console.error("Telemetry failed:", err); }
     }
@@ -215,21 +201,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('swap-button')) {
             const alternativeName = e.target.getAttribute('data-product-name');
             await sendValueTelemetry(alternativeName);
-
             const selectedProduct = sovrnMerchantCatalog.find(p => p.name === alternativeName);
             const destinationUrl = selectedProduct ? selectedProduct.targetUrl : "https://www.google.com";
-            
             const SOVRN_API_KEY = "YOUR_SOVRN_API_KEY"; 
             const userTrackingId = encodeURIComponent(savedEmail || "GUEST PROFILE");
             const liveAffiliateRedirectUrl = `https://redirect.viglink.com?key=${SOVRN_API_KEY}&u=${encodeURIComponent(destinationUrl)}&cuid=${userTrackingId}`;
-
             window.location.href = liveAffiliateRedirectUrl;
         }
     });
 
-    // =========================================================================
-    // 6. LIVE AI SCANNER INTEGRATION
-    // =========================================================================
+    // --- 7. LIVE AI SCANNER INTEGRATION ---
     document.getElementById('triggerScanBtn').addEventListener('click', async function() {
         const path = document.getElementById('itemUrlInput').value.trim();
         if(!path) return alert('Please enter a target product URL.');
@@ -243,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const urlObj = new URL(path);
             document.getElementById('displayDomain').textContent = urlObj.hostname.replace('www.', '');
             
-            // Call the Gemini Backend Agent
             const response = await fetch(`${RENDER_BASE_URL}/api/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -255,9 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if(data.success && data.auditedProduct) {
                 const aiData = data.auditedProduct;
                 document.getElementById('displayProductTitle').textContent = aiData.product_name || aiData.brand;
-                document.getElementById('displayScannedPrice').style.display = 'none'; // Hide generic price
+                document.getElementById('displayScannedPrice').style.display = 'none'; 
                 
-                // Map the AI's metrics 
                 currentScannedMetrics = [
                     aiData.metrics.clean, aiData.metrics.organic, aiData.metrics.crueltyFree,
                     aiData.metrics.vegan, aiData.metrics.waste, aiData.metrics.climate,
@@ -265,7 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     aiData.metrics.inclusion, aiData.metrics.local, aiData.metrics.regenerative
                 ];
 
-                // Inject the Evidence Log into the UI
                 let evidenceBox = document.getElementById('heroEvidenceLog');
                 if(!evidenceBox) {
                     evidenceBox = document.createElement('div');
@@ -275,16 +253,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.querySelector('.scanned-hero-card').parentElement.insertBefore(evidenceBox, document.querySelector('.stream-title-row'));
                 }
                 
-                // Style based on score threshold
                 evidenceBox.innerHTML = `<strong>AI Audit Evidence:</strong> ${aiData.evidence}`;
-                evidenceBox.style.borderLeftColor = '#ef4444'; // Red flag for low transparency
+                evidenceBox.style.borderLeftColor = '#ef4444'; 
                 
-                // Recalculate to show the actual match score!
                 recalibrateAlgorithm(); 
             } else {
                 alert('Audit failed. Please check your backend terminal for errors.');
             }
-            
         } catch(e) {
             console.error(e);
             document.getElementById('displayDomain').textContent = 'External Store Listing';
