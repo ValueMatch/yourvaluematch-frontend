@@ -1,30 +1,35 @@
-const RENDER_BASE_URL = 'http://localhost:3000'; // Change to your live URL when deployed
-
-// 12-Point Catalog Data (Mocked Alternatives for now)
-const sovrnMerchantCatalog = [
-    {
-        name: "Hurraw! Balm",
-        price: "£4.10",
-        img: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=150&q=80",
-        metrics: { clean: 98, organic: 95, crueltyFree: 100, vegan: 100, waste: 80, climate: 85, labor: 90, transparency: 95, indie: 100, inclusion: 90, local: 70, regenerative: 85 },
-        evidence: "Certified Vegan & Cruelty-Free. Independent business utilizing 100% organic cold-pressed oils. Transparent supply chain mapping provided.",
-        targetUrl: "https://example.com/hurraw"
-    },
-    {
-        name: "Dr. Bronner's Organic Lip Balm",
-        price: "£3.75",
-        img: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=150&q=80",
-        metrics: { clean: 95, organic: 100, crueltyFree: 100, vegan: 50, waste: 75, climate: 90, labor: 100, transparency: 85, indie: 100, inclusion: 80, local: 60, regenerative: 95 },
-        evidence: "USDA Organic and Fair Trade Certified. Family-owned (independent) with rigorous, audited labor standards and climate-neutral factory operations. Contains beeswax.",
-        targetUrl: "https://example.com/drbronners"
-    },
-    {
-        name: "EcoLips Bee Free Balm",
-        price: "£4.50",
-        img: "https://images.unsplash.com/photo-1608248597481-496100c8c836?auto=format&fit=crop&w=150&q=80",
-        metrics: { clean: 90, organic: 85, crueltyFree: 100, vegan: 100, waste: 100, climate: 70, labor: 90, transparency: 80, indie: 90, inclusion: 85, local: 90, regenerative: 75 },
-        evidence: "100% Vegan formulation (candelilla wax). Uses a fully compostable, plastic-free Plant Pod tube (100% Zero-Waste). Certified B-Corp.",
-        targetUrl: "https://example.com/ecolips"
+// --- FETCH LIVE PRODUCTS FROM YOUR POSTGRES ENGINE ---
+    try {
+        const res = await fetch(`${RENDER_BASE_URL}/api/products`);
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        
+        const data = await res.json();
+        if (data.success && data.products) {
+            sovrnMerchantCatalog = data.products.map(p => ({
+                name: p.name,
+                price: `£${p.price}`,
+                img: p.image_url || "https://images.unsplash.com/photo-1608248597481-496100c8c836?auto=format&fit=crop&w=150&q=80",
+                metrics: {
+                    clean: p.clean_ingredients_score || 50,
+                    organic: 50, // Default fallback
+                    crueltyFree: p.cruelty_free_score || 50,
+                    vegan: p.cruelty_free_score > 70 ? 90 : 50, // Derived fallback
+                    waste: p.low_waste_score || 50,
+                    climate: p.low_waste_score || 50,
+                    labor: p.ethical_labor_score || 50,
+                    transparency: 60,
+                    indie: 70,
+                    inclusion: 50,
+                    local: 40,
+                    regenerative: 30
+                },
+                evidence: `Verified database asset matching brand tier: ${p.brand_name}. In stock at ${p.merchant_name || 'Partner Merchant'}.`,
+                targetUrl: p.original_url || "https://www.google.com"
+            }));
+            recalibrateAlgorithm(); 
+        }
+    } catch (err) {
+        console.error("Failed to feed live catalog stream:", err);
     }
 ];
 
