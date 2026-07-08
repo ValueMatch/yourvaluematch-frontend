@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const alternativesContainer = document.getElementById('alternativesContainer');
 
     // 7-Point Matrix
-    const sliderIds = ['sl_clean', 'sl_cruelty', 'sl_vegan', 'sl_waste', 'sl_climate', 'sl_labor', 'sl_inclusion'];
+    const sliderIds = ['sl_clean', 'sl_cruelty', 'sl_vegan', 'sl_waste', 'sl_climate', 'sl_labor', 'sl_indie', 'sl_inclusion'];
     const sliders = sliderIds.map(id => document.getElementById(id));
     const outputs = Array.from({length: 7}, (_, i) => document.getElementById(`valOut${i}`));
     
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // --- 5. CORE ALGORITHM LOGIC (Updated for 7 Points) ---
+    // --- 5. CORE ALGORITHM LOGIC (Updated for 8 Points) ---
     function recalibrateAlgorithm() {
         const userValues = sliders.map(s => parseInt(s.value) || 0);
         
@@ -109,11 +109,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (currentScannedMetrics) {
             let totalVariance = 0;
-            for(let i = 0; i < 7; i++) {
+            for(let i = 0; i < 8; i++) {
                 let importanceMultiplier = (userValues[i] / 100) + 0.5; 
                 totalVariance += Math.abs(currentScannedMetrics[i] - userValues[i]) * importanceMultiplier;
             }
-            let avgRawVariance = totalVariance / 7;
+            let avgRawVariance = totalVariance / 8;
             let finalHeroScore = Math.max(0, Math.min(100, Math.round(100 - avgRawVariance)));
             scoreLabel.textContent = finalHeroScore + '%';
             updateColorClass(scoreLabel, finalHeroScore);
@@ -121,17 +121,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         let calculatedDirectory = sovrnMerchantCatalog.map(product => {
             const pMetrics = [
-                product.metrics.clean, product.metrics.crueltyFree,
-                product.metrics.vegan, product.metrics.waste, product.metrics.climate,
-                product.metrics.labor, product.metrics.inclusion
+            product.metrics.clean, product.metrics.crueltyFree, product.metrics.vegan, 
+            product.metrics.waste, product.metrics.climate, product.metrics.labor, 
+            product.metrics.indie, product.metrics.inclusion
             ];
             
             let totalVariance = 0;
-            for(let i = 0; i < 7; i++) {
+            for(let i = 0; i < 8; i++) {
                 let importanceMultiplier = (userValues[i] / 100) + 0.5; 
                 totalVariance += Math.abs(pMetrics[i] - userValues[i]) * importanceMultiplier;
             }
-            let avgRawVariance = totalVariance / 7;
+            let avgRawVariance = totalVariance / 8;
             let alignmentPercentage = Math.max(10, Math.min(100, Math.round(100 - avgRawVariance)));
             
             return Object.assign({}, product, { computedMatchScore: alignmentPercentage });
@@ -179,9 +179,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const valuePayload = {
             email: currentEmail, clicked_product: targetAlternative,
             clean_ingredients_score: currentValues[0], cruelty_free_score: currentValues[1],
-            vegan_score: currentValues[2], low_waste_score: currentValues[3],
-            climate_impact_score: currentValues[4], ethical_labor_score: currentValues[5],
-            inclusion_score: currentValues[6]
+    vegan_score: currentValues[2], low_waste_score: currentValues[3],
+    climate_impact_score: currentValues[4], ethical_labor_score: currentValues[5],
+    indie_scale_score: currentValues[6], inclusion_score: currentValues[7]
         };
         try {
             await fetch(`${RENDER_BASE_URL}/api/logs/click`, {
@@ -257,11 +257,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                 }
                 
-                // Maps EXACTLY to the 7 traits
+                // Maps EXACTLY to the 8 traits
                 currentScannedMetrics = [
-                    aiData.metrics.clean, aiData.metrics.crueltyFree,
-                    aiData.metrics.vegan, aiData.metrics.waste, aiData.metrics.climate,
-                    aiData.metrics.labor, aiData.metrics.inclusion
+                    aiData.metrics.clean, 
+                    aiData.metrics.crueltyFree,
+                    aiData.metrics.vegan, 
+                    aiData.metrics.waste, 
+                    aiData.metrics.climate,
+                    aiData.metrics.labor, 
+                    aiData.metrics.indie,
+                    aiData.metrics.inclusion
                 ];
 
                 let evidenceBox = document.getElementById('heroEvidenceLog');
