@@ -244,19 +244,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                         priceEl.style.display = 'none'; 
                     }
                 
-                    // --- UPDATE IMAGE WITH FALLBACK ---
-                        if (aiData.image_url) {
-                            const heroImage = document.querySelector('.scanned-hero-card img');
+                    // --- UPDATE IMAGE WITH BULLETPROOF FALLBACK ---
+                        if (aiData.image_url && aiData.image_url.startsWith('http')) {
+                            // Target both common selector possibilities to be safe
+                            const heroImage = document.querySelector('.scanned-hero-card img') || document.querySelector('.media-box img');
+                            
                             if (heroImage) {
                                 heroImage.src = aiData.image_url;
                                 
-                                // If the retailer blocks hotlinking, seamlessly fall back to our default placeholder
+                                // Catch hotlink blocks or broken links instantly
                                 heroImage.onerror = () => {
-                                    heroImage.src = "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=150&q=80";
+                                    heroImage.src = "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=400&q=80";
                                 };
                             }
+                        } else {
+                            // If no valid URL string was returned, use the high-quality placeholder directly
+                            const heroImage = document.querySelector('.scanned-hero-card img') || document.querySelector('.media-box img');
+                            if (heroImage) {
+                                heroImage.src = "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=400&q=80";
+                            }
                         }
-                
+                                    
                 currentScannedMetrics = [
                     aiData.metrics.clean, aiData.metrics.organic, aiData.metrics.crueltyFree,
                     aiData.metrics.vegan, aiData.metrics.waste, aiData.metrics.climate,
