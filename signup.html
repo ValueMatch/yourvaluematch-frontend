@@ -190,9 +190,16 @@
 
     // --- BUTTON ROUTING LOGIC --- //
 
-    // 1. Guest Routing
+    // 1. Guest Routing (FIXED: Now saves the active template scores)
     document.getElementById('continueGuestBtn').addEventListener('click', () => {
+        // Find the active template's scores array
+        const selectedData = valueTemplates.find(t => t.id === activeTemplateId);
+        
+        // Remove email to ensure Guest status, but save the 8-point matrix data
         localStorage.removeItem('savedEmail'); 
+        localStorage.setItem('userProfileScores', JSON.stringify(selectedData.scores));
+        
+        console.log("Guest profile created. 8-Point Data mapped.");
         window.location.href = 'app.html';
     });
 
