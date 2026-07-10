@@ -1,15 +1,16 @@
 const RENDER_BASE_URL = 'https://yourvaluematch-backend.onrender.com';
 let sovrnMerchantCatalog = []; 
 
-// --- NEW: BASELINE PILLAR LOGIC ---
-// Array order MUST MATCH: [Clean, Cruelty, Vegan, Waste, Climate, Labor, Indie, Inclusion]
+// --- 1. BASELINE PILLAR LOGIC ---
+// Array order MUST MATCH: [Clean, Cruelty, Vegan, Waste, Climate, Labor, Independent, Inclusion]
 const pillarPresets = {
-    'eco-warrior': [80, 70, 60, 100, 100, 50, 50, 50],
-    'ethical-labor': [50, 50, 50, 50, 50, 100, 70, 90],
-    'indie-champion': [50, 50, 50, 60, 50, 70, 100, 80]
+    'clean-composition': [100, 60, 50, 60, 50, 50, 50, 50],
+    'ethical-labour':    [50, 50, 50, 50, 50, 100, 50, 90],
+    'planet-first':      [60, 50, 50, 100, 100, 60, 50, 50],
+    'animal-advocate':   [60, 100, 100, 50, 60, 50, 50, 50]
 };
 
-// Global function so your HTML <select> onchange event can trigger it
+// Global function so your HTML <select> or radio buttons onchange event can trigger it
 window.applyBaselinePillar = function(pillarName) {
     const values = pillarPresets[pillarName];
     if (!values) return;
@@ -17,7 +18,7 @@ window.applyBaselinePillar = function(pillarName) {
     // Save to localStorage so it persists on refresh
     localStorage.setItem('userProfileScores', JSON.stringify(values));
 
-    const sliderIds = ['sl_clean', 'sl_cruelty', 'sl_vegan', 'sl_waste', 'sl_climate', 'sl_labor', 'sl_indie', 'sl_inclusion'];
+    const sliderIds = ['sl_clean', 'sl_cruelty', 'sl_vegan', 'sl_waste', 'sl_climate', 'sl_labor', 'sl_independent', 'sl_inclusion'];
     sliderIds.forEach((id, index) => {
         const slider = document.getElementById(id);
         const outputText = document.getElementById(`valOut${index}`);
@@ -32,7 +33,6 @@ window.applyBaselinePillar = function(pillarName) {
     if(firstSlider) firstSlider.dispatchEvent(new Event('input'));
 };
 
-
 document.addEventListener('DOMContentLoaded', async () => {
     const activeProfileLabel = document.getElementById('activeProfileLabel');
     const guestPanel = document.getElementById('guestConversionPanel');
@@ -40,14 +40,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const scoreLabel = document.getElementById('computedScoreLabel');
     const alternativesContainer = document.getElementById('alternativesContainer');
 
-    // 8-Point Matrix (Fixed the outputs length to 8)
-    const sliderIds = ['sl_clean', 'sl_cruelty', 'sl_vegan', 'sl_waste', 'sl_climate', 'sl_labor', 'sl_indie', 'sl_inclusion'];
+    // 8-Point Matrix
+    const sliderIds = ['sl_clean', 'sl_cruelty', 'sl_vegan', 'sl_waste', 'sl_climate', 'sl_labor', 'sl_independent', 'sl_inclusion'];
     const sliders = sliderIds.map(id => document.getElementById(id));
     const outputs = Array.from({length: 8}, (_, i) => document.getElementById(`valOut${i}`));
     
     let currentScannedMetrics = null;
 
-    // --- 1. FETCH LIVE PRODUCTS FROM POSTGRES ---
+    // --- 2. FETCH LIVE PRODUCTS FROM POSTGRES ---
     try {
         const res = await fetch(`${RENDER_BASE_URL}/api/products`);
         if (res.ok) {
@@ -64,8 +64,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         waste: p.low_waste_score || 50,
                         climate: p.low_waste_score || 50,
                         labor: p.ethical_labor_score || 50,
-                        indie: p.indie_scale_score || 50, // Added safety fallback here
-                        inclusion: p.inclusion_score || 50 // Added safety fallback here
+                        independent: p.independent_scale_score || 50, 
+                        inclusion: p.inclusion_score || 50 
                     },
                     evidence: `Verified database asset matching brand tier: ${p.brand_name}. In stock at ${p.merchant_name || 'Partner Merchant'}.`,
                     targetUrl: p.original_url || "https://www.google.com"
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error("Failed to feed live catalog stream:", err);
     }
 
-    // --- 2. THE HANDSHAKE: INJECT SAVED PRESETS ---
+    // --- 3. THE HANDSHAKE: INJECT SAVED PRESETS ---
     const savedScoresJSON = localStorage.getItem('userProfileScores');
     if (savedScoresJSON) {
         const presetScores = JSON.parse(savedScoresJSON);
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // --- 3. IDENTITY CHECK ---
+    // --- 4. IDENTITY CHECK ---
     const savedEmail = localStorage.getItem('savedEmail');
     if (savedEmail && savedEmail.includes('@')) {
         activeProfileLabel.innerHTML = 'ACTIVE PROFILE:<br><span style="color: #818cf8;">' + savedEmail + '</span>';
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // --- 4. UI HELPER FUNCTIONS ---
+    // --- 5. UI HELPER FUNCTIONS ---
     function updateColorClass(element, score) {
         if (!element) return;
         if (score >= 80) { element.style.color = "var(--match-green)"; } 
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // --- 5. CORE ALGORITHM LOGIC (Updated for 8 Points) ---
+    // --- 6. CORE ALGORITHM LOGIC (Updated for 8 Points) ---
     function recalibrateAlgorithm() {
         const userValues = sliders.map(s => parseInt(s.value) || 0);
         
@@ -151,3 +151,205 @@ document.addEventListener('DOMContentLoaded', async () => {
                 let importanceMultiplier = (userValues[i] / 100) + 0.5; 
                 totalVariance += Math.abs(currentScannedMetrics[i] - userValues[i]) * importanceMultiplier;
             }
+            let avgRawVariance = totalVariance / 8;
+            let finalHeroScore = Math.max(0, Math.min(100, Math.round(100 - avgRawVariance)));
+            scoreLabel.textContent = finalHeroScore + '%';
+            updateColorClass(scoreLabel, finalHeroScore);
+        }
+
+        let calculatedDirectory = sovrnMerchantCatalog.map(product => {
+            const pMetrics = [
+                product.metrics.clean, product.metrics.crueltyFree, product.metrics.vegan, 
+                product.metrics.waste, product.metrics.climate, product.metrics.labor, 
+                product.metrics.independent, product.metrics.inclusion
+            ];
+            
+            let totalVariance = 0;
+            for(let i = 0; i < 8; i++) {
+                let importanceMultiplier = (userValues[i] / 100) + 0.5; 
+                totalVariance += Math.abs(pMetrics[i] - userValues[i]) * importanceMultiplier;
+            }
+            let avgRawVariance = totalVariance / 8;
+            let alignmentPercentage = Math.max(10, Math.min(100, Math.round(100 - avgRawVariance)));
+            
+            return Object.assign({}, product, { computedMatchScore: alignmentPercentage });
+        });
+
+        calculatedDirectory.sort((a, b) => b.computedMatchScore - a.computedMatchScore);
+
+        alternativesContainer.innerHTML = "";
+        calculatedDirectory.forEach((product, idx) => {
+            const card = document.createElement('div');
+            card.className = "alternative-card";
+            card.innerHTML = `
+                <div class="alt-top">
+                    <div style="display:flex; gap:16px; align-items:center;">
+                        <div class="media-box">
+                            <img src="${product.img}" alt="${product.name}">
+                        </div>
+                        <div>
+                            <h4 class="alt-brand-name" style="margin:0;">${product.name}</h4>
+                            <span class="alt-pricing">Market Price: ${product.price}</span>
+                        </div>
+                    </div>
+                    <span class="badge-pill" id="scorePill_index_${idx}" style="border: 1px solid;">${product.computedMatchScore}% Value Alignment</span>
+                </div>
+                
+                <div class="log-container">
+                    <strong>Verified Evidence Log:</strong> ${product.evidence}
+                </div>
+                
+                <button class="swap-button" data-product-name="${product.name}">Swap to ${product.name}</button>
+            `;
+            alternativesContainer.appendChild(card);
+            const currentPill = document.getElementById('scorePill_index_' + idx);
+            if (currentPill) { updatePillColor(currentPill, product.computedMatchScore); }
+        });
+    }
+
+    sliders.forEach(s => { if(s) s.addEventListener('input', recalibrateAlgorithm); });
+    recalibrateAlgorithm();
+
+    // --- 7. TELEMETRY ROUTING ---
+    async function sendValueTelemetry(targetAlternative) {
+        const currentEmail = savedEmail || "GUEST PROFILE";
+        const currentValues = sliders.map(s => parseInt(s.value) || 0);
+        const valuePayload = {
+            email: currentEmail, 
+            clicked_product: targetAlternative,
+            clean_ingredients_score: currentValues[0], 
+            cruelty_free_score: currentValues[1],
+            vegan_score: currentValues[2], 
+            low_waste_score: currentValues[3],
+            climate_impact_score: currentValues[4], 
+            ethical_labor_score: currentValues[5],
+            independent_scale_score: currentValues[6], 
+            inclusion_score: currentValues[7]
+        };
+        try {
+            await fetch(`${RENDER_BASE_URL}/api/logs/click`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(valuePayload), keepalive: true
+            });
+        } catch (err) { console.error("Telemetry failed:", err); }
+    }
+
+    alternativesContainer.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('swap-button')) {
+            const alternativeName = e.target.getAttribute('data-product-name');
+            await sendValueTelemetry(alternativeName);
+            const selectedProduct = sovrnMerchantCatalog.find(p => p.name === alternativeName);
+            const destinationUrl = selectedProduct ? selectedProduct.targetUrl : "https://www.google.com";
+            const SOVRN_API_KEY = "YOUR_SOVRN_API_KEY"; 
+            const userTrackingId = encodeURIComponent(savedEmail || "GUEST PROFILE");
+            const liveAffiliateRedirectUrl = `https://redirect.viglink.com?key=${SOVRN_API_KEY}&u=${encodeURIComponent(destinationUrl)}&cuid=${userTrackingId}`;
+            window.location.href = liveAffiliateRedirectUrl;
+        }
+    });
+
+    // --- 8. LIVE AI SCANNER INTEGRATION ---
+    document.getElementById('triggerScanBtn').addEventListener('click', async function() {
+        const path = document.getElementById('itemUrlInput').value.trim();
+        if(!path) return alert('Please enter a target product URL.');
+        
+        const scanBtn = this;
+        scanBtn.textContent = 'Auditing...';
+        scanBtn.style.background = '#818cf8'; 
+        scanBtn.disabled = true;
+
+        try {
+            const urlObj = new URL(path);
+            document.getElementById('displayDomain').textContent = urlObj.hostname.replace('www.', '');
+            
+            // GRAB SLIDER VALUES TO SEND TO GEMINI
+            const currentValues = sliders.map(s => parseInt(s.value) || 0);
+
+            const response = await fetch(`${RENDER_BASE_URL}/api/analyze`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    product: path, 
+                    userEmail: savedEmail,
+                    userValues: currentValues 
+                })
+            });
+
+            const data = await response.json();
+            
+            if(data.success && data.auditedProduct) {
+                const aiData = data.auditedProduct;
+                document.getElementById('displayProductTitle').textContent = aiData.product_name || aiData.brand;
+                
+                // --- UPDATE PRICE ---
+                const priceEl = document.getElementById('displayScannedPrice');
+                priceEl.textContent = (aiData.price && aiData.price !== 'N/A') ? `Est. Price: ${aiData.price}` : 'Price Unavailable';
+                priceEl.style.display = 'inline-block';
+                
+                // --- UPDATE IMAGE WITH BULLETPROOF FALLBACK ---
+                if (aiData.image_url && aiData.image_url.startsWith('http')) {
+                    const heroImage = document.querySelector('.scanned-hero-card img') || document.querySelector('.media-box img');
+                    if (heroImage) {
+                        const imgTester = new Image();
+                        imgTester.onload = () => { heroImage.src = aiData.image_url; };
+                        imgTester.onerror = () => { heroImage.src = "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=400&q=80"; };
+                        imgTester.src = aiData.image_url;
+                    }
+                } else {
+                    const heroImage = document.querySelector('.scanned-hero-card img') || document.querySelector('.media-box img');
+                    if (heroImage) {
+                        heroImage.src = "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=400&q=80";
+                    }
+                }
+                
+                // Maps EXACTLY to the 8 traits
+                currentScannedMetrics = [
+                    aiData.metrics.clean, 
+                    aiData.metrics.crueltyFree,
+                    aiData.metrics.vegan, 
+                    aiData.metrics.waste, 
+                    aiData.metrics.climate,
+                    aiData.metrics.labor, 
+                    aiData.metrics.independent,
+                    aiData.metrics.inclusion
+                ];
+
+                let evidenceBox = document.getElementById('heroEvidenceLog');
+                if(!evidenceBox) {
+                    evidenceBox = document.createElement('div');
+                    evidenceBox.id = 'heroEvidenceLog';
+                    evidenceBox.className = 'log-container';
+                    evidenceBox.style.marginTop = '16px';
+                    document.querySelector('.scanned-hero-card').parentElement.insertBefore(evidenceBox, document.querySelector('.stream-title-row'));
+                }
+                
+                evidenceBox.innerHTML = `<strong>AI Audit Evidence:</strong> ${aiData.evidence}`;
+                evidenceBox.style.borderLeftColor = '#ef4444'; 
+                
+                recalibrateAlgorithm(); 
+            } else {
+                alert('Audit failed. Please check your backend terminal for errors.');
+            }
+        } catch(e) {
+            console.error(e);
+            document.getElementById('displayDomain').textContent = 'External Store Listing';
+            alert('Failed to connect to the backend agent.');
+        } finally {
+            scanBtn.textContent = 'Scan';
+            scanBtn.style.background = '#0f172a';
+            scanBtn.disabled = false;
+        }
+    });
+
+    document.getElementById('resetInputLink').addEventListener('click', function() {
+        document.getElementById('itemUrlInput').value = '';
+        document.getElementById('itemUrlInput').focus();
+    });
+
+    if (resetEntireSessionLink) {
+        resetEntireSessionLink.addEventListener('click', function() {
+            try { 
+                localStorage.clear(); 
+                window.location.href = 'index.html';
+            } catch(err){}
+        });
+    }
+});
