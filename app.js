@@ -181,34 +181,64 @@ document.addEventListener('DOMContentLoaded', async () => {
         calculatedDirectory.sort((a, b) => b.computedMatchScore - a.computedMatchScore);
 
         alternativesContainer.innerHTML = "";
-        calculatedDirectory.forEach((product, idx) => {
-            const card = document.createElement('div');
-            card.className = "alternative-card";
-            card.innerHTML = `
-                <div class="alt-top">
-                    <div style="display:flex; gap:16px; align-items:center;">
-                        <div class="media-box">
-                            <img src="${product.img}" alt="${product.name}">
-                        </div>
-                        <div>
-                            <h4 class="alt-brand-name" style="margin:0;">${product.name}</h4>
-                            <span class="alt-pricing">Market Price: ${product.price}</span>
-                        </div>
-                    </div>
-                    <span class="badge-pill" id="scorePill_index_${idx}" style="border: 1px solid;">${product.computedMatchScore}% Value Alignment</span>
-                </div>
-                
-                <div class="log-container">
-                    <strong>Verified Evidence Log:</strong> ${product.evidence}
-                </div>
-                
-                <button class="swap-button" data-product-name="${product.name}">Swap to ${product.name}</button>
-            `;
-            alternativesContainer.appendChild(card);
-            const currentPill = document.getElementById('scorePill_index_' + idx);
-            if (currentPill) { updatePillColor(currentPill, product.computedMatchScore); }
-        });
-    }
+        calculatedDirectory.forEach(function(product, idx) {
+  const card = document.createElement('div');
+  card.className = "alternative-card";
+  
+  // Apply a CSS blur if the user has not unlocked premium
+  const blurStyle = hasUnlockedPremium ? "" : "filter: blur(8px); pointer-events: none; user-select: none;";
+  
+  card.innerHTML = `
+    <div style="position: relative;">
+      
+      ${!hasUnlockedPremium ? `
+      <div style="position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255,255,255,0.2);">
+        <span style="background: #0f172a; color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          ${product.computedMatchScore}% Match Found
+        </span>
+        <a href="YOUR_STRIPE_PAYMENT_LINK_HERE" style="background: var(--electric-lilac); color: white; padding: 16px 28px; border-radius: 14px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 8px 24px rgba(129, 140, 248, 0.4); transition: transform 0.2s;">
+          Unlock Alternative Matches - $15
+        </a>
+      </div>
+      ` : ''}
+      
+      <div style="${blurStyle}">
+        <div class="alt-top">
+          <div style="display:flex; gap:16px; align-items:center;">
+            <div class="media-box">
+              <img src="${hasUnlockedPremium ? product.img : 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=150&q=80'}" alt="Verified Match">
+            </div>
+            <div>
+              <h4 class="alt-brand-name" style="margin:0;">${hasUnlockedPremium ? product.name : 'Verified Independent Brand'}</h4>
+              <span class="alt-pricing">Estimated Value Validation: ${product.price}</span>
+            </div>
+          </div>
+          <span class="badge-pill" id="scorePill_index_${idx}" style="border: 1px solid;">${product.computedMatchScore}% Match Alternative</span>
+        </div>
+        
+        <div class="matrix-metrics-grid">
+          <div class="metric-cell"><div class="cell-label">Composition</div><div class="cell-value">${product.composition}</div></div>
+          <div class="metric-cell"><div class="cell-label">Labor Trace</div><div class="cell-value">${product.labor}</div></div>
+          <div class="metric-cell"><div class="cell-label">Packaging</div><div class="cell-value">${product.packaging}</div></div>
+        </div>
+        
+        <div class="log-container">
+          <strong>Verification Evidence Log:</strong> ${hasUnlockedPremium ? product.evidence : 'Data verified via independent corporate registry and environmental audits.'}
+        </div>
+        
+        <button class="swap-button" onclick="alert('Routing alternative tracking parameters via Sovrn integration loops...')">
+          Swap to ${hasUnlockedPremium ? product.name : 'Aligned Brand'}
+        </button>
+      </div>
+    </div>
+  `;
+  
+  alternativesContainer.appendChild(card);
+  const currentPill = document.getElementById('scorePill_index_' + idx);
+  if (currentPill) {
+    updatePillColor(currentPill, product.computedMatchScore);
+  }
+});
 
     sliders.forEach(s => { if(s) s.addEventListener('input', recalibrateAlgorithm); });
     recalibrateAlgorithm();
